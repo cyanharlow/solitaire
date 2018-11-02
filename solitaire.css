@@ -104,6 +104,8 @@ body {
     float: left;
     margin-top: 6px;
     margin-right: 0;
+    margin-left: 5px;
+    transition: margin-left 0.5s;
 }
 .refuse-pile .cd.f {
     margin-left: -54px;
