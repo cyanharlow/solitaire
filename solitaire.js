@@ -35,14 +35,13 @@ function shuffle(a) {
     }
     return a;
 }
+
 function cardContents(n, s) {
-    var htmls = '<p>' + displays['n' + n] + '</p><hr/><h2>' + s.toUpperCase() + '</h2>';
-    
-    return htmls;
+    return '<p>' + displays['n' + n] + '</p><hr/><h2>' + s.toUpperCase() + '</h2>';
 }
 
 document.addEventListener('mousedown', function(e) {
-    if (e.target.className.indexOf('cd') > -1 && !e.target.data.f) {
+    if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         movingCard = true;
         activeCard = e.target;
         lastLocation = e.target.parentNode;
@@ -59,34 +58,44 @@ document.addEventListener('hover', function(e) {
 });
 
 document.addEventListener('mouseup', function(e) {
-    var lastPosX = e.clientX;
-    var lastPosY = e.clientY;
+    var lastPosX = e.pageX
+    var lastPosY = e.pageY;
+
+    window.console.log(e)
+    window.console.log(lastPosX + ',' + lastPosY);
+
     if (movingCard) {
         var movingSuit = activeCard.data.s;
         var movingNum = activeCard.data.n;
         var movingColor = activeCard.data.colr;
         var accepters = document.getElementsByClassName('a');
-        for (var a = 0; a < accepters.length; a++) {
-            var accepter = accepters[a];
+        for (var ac = 0; ac < accepters.length; ac++) {
+            var accepter = accepters[ac];
+            if (accepter.id == activeCard.id) {
+                continue;
+            }
+
             var aX0 = accepter.offsetLeft;
             var aX1 = accepter.offsetLeft + accepter.offsetWidth;
             var aY0 = accepter.offsetTop;
-            var aY1 = accepter.offsetTop + accepter.offsetH;
+            var aY1 = accepter.offsetTop + accepter.offsetHeight;
+
+            window.console.log(aX0 + ',' + aY0);
 
             var aN = accepter.data.n;
             var aS = accepter.data.s;
             var aC = accepter.data.colr;
 
-            if (accepter.parentNode.className.indexOf('stack') > -1) {
+            var isStack = accepter.parentNode.className.indexOf('stack') > -1;
 
+            if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
+                accepter.className = accepter.className.replace(' a', '');
 
                 accepter.parentNode.appendChild(activeCard);
-                flipOver(lastLocation.children[lastLocation.children.length - 1]);
-                break;
+                if (lastLocation.children.length) {
+                    flipOver(lastLocation.children[lastLocation.children.length - 1], true);
+                }
             }
-
-
-
         }
     }
     movingCard = false;
@@ -101,10 +110,11 @@ document.addEventListener('mousemove', function(e) {
     }
 });
 
-function flipOver(card) {
-    card.data.f = false;
+function flipOver(card, accepting) {
+    card.data.folded = false;
     cData = card.data;
-    card.className = 'cd ' + cData.s + ' n' +cData.n;
+    card.id = cData.s + cData.n;
+    card.className = 'cd ' + cData.s + ' n' + cData.n + (accepting ? ' a' : '');
     card.innerHTML = cardContents(cData.n, cData.s);
 }
 
@@ -148,9 +158,7 @@ for (var r = 0; r < 29; r++) {
             var stack = document.getElementById('stack' + maxStack);
             stack.appendChild(sortoCard);
             if (Number(stack.getAttribute('data-max')) == stack.children.length) {
-                flipOver(sortoCard);
-                sortoCard.data.accepting = true;
-                sortoCard.className = sortoCard.className + ' a';
+                flipOver(sortoCard, true);
             }
         }
     }, delay * 20);
