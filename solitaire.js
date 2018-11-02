@@ -53,9 +53,14 @@ document.addEventListener('mousedown', function(e) {
     }
 });
 
-document.addEventListener('hover', function(e) {
-    if (movingCard && e.target.className.indexOf('cd') > -1 && !e.target.data.f) {
-        window.console.log(e)
+document.addEventListener('click', function(e) {
+    if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
+        if (e.target.nextElementSibling) {
+            tuck(e.target.nextElementSibling);
+        }
+        if (e.target.nextElementSibling == null) {
+            reveal(e.target);
+        }
     }
 });
 
@@ -71,7 +76,7 @@ document.addEventListener('mouseup', function(e) {
         var accepters = document.getElementsByClassName('a');
         for (var ac = 0; ac < accepters.length; ac++) {
             var accepter = accepters[ac];
-            if (accepter.id == activeCard.id) {
+            if (accepter.data && accepter.data.id == activeCard.data.id) {
                 continue;
             }
 
@@ -91,8 +96,14 @@ document.addEventListener('mouseup', function(e) {
                     if (movingNum === 13) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.appendChild(activeCard);
+                        reveal(activeCard, true);
                         while (multiCards.length) {
+                            reveal(activeCard, false);
+                            multiCards[0].style = '';
                             accepter.parentNode.appendChild(multiCards[0]);
+                            if (multiCards.length === 1) {
+                                reveal(multiCards[0], true);
+                            }
                             multiCards.shift();
                         }
                         successfulMove = true;
@@ -122,8 +133,12 @@ document.addEventListener('mouseup', function(e) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.parentNode.appendChild(activeCard);
                         while (multiCards.length) {
+                            reveal(activeCard, false);
                             multiCards[0].style = '';
                             accepter.parentNode.appendChild(multiCards[0]);
+                            if (multiCards.length === 1) {
+                                reveal(multiCards[0], true);
+                            }
                             multiCards.shift();
                         }
                         successfulMove = true;
@@ -136,7 +151,7 @@ document.addEventListener('mouseup', function(e) {
     }
     if (successfulMove) {
         if (lastLocation.children.length) {
-            flipOver(lastLocation.children[lastLocation.children.length - 1], true);
+            reveal(lastLocation.children[lastLocation.children.length - 1], lastLocation.className.indexOf('refuse') > -1 ? false : true);
         } else {
             lastLocation.className = lastLocation.className + ' a';
         }
@@ -167,12 +182,18 @@ document.addEventListener('mousemove', function(e) {
     }    
 });
 
-function flipOver(card, accepting) {
+function reveal(card, accepting) {
     card.data.folded = false;
     cData = card.data;
-    card.id = cData.s + cData.n;
     card.className = 'cd ' + cData.s + ' n' + cData.n + (accepting ? ' a' : '');
     card.innerHTML = cardContents(cData.n, cData.s);
+}
+
+function tuck(card) {
+    card.data.folded = true;
+    card.className = 'cd f';
+    card.innerHTML = '';
+    card.parentNode.insertBefore(card, card.parentNode.firstChild);
 }
 
 for (var s = 0; s < suits.length; s++) {
@@ -193,6 +214,7 @@ for (var i = 0; i < cards.length; i++) {
     cardHTML.data = {
         's': cards[i].suit,
         'n': cards[i].num,
+        'id': cards[i].suit + cards[i].num,
         'colr': cards[i].suit === 'd' || cards[i].suit === 'h' ? 'r' : 'b',
         'folded': true
     };
@@ -215,7 +237,7 @@ for (var r = 0; r < 29; r++) {
             var stack = document.getElementById('stack' + maxStack);
             stack.appendChild(sortoCard);
             if (Number(stack.getAttribute('data-max')) == stack.children.length) {
-                flipOver(sortoCard, true);
+                reveal(sortoCard, true);
             }
         }
     }, delay * 20);

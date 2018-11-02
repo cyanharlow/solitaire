@@ -83,6 +83,10 @@ body {
     border-radius: 50%;
 }
 
+.stacks {
+    clear: both;
+}
+
 .stack {
     width: 14%;
     padding-top: 60px;
@@ -98,7 +102,11 @@ body {
 }
 .refuse-pile .cd {
     float: left;
-    margin: 6px 0 10px -53px;
+    margin-top: 6px;
+    margin-right: 0;
+}
+.refuse-pile .cd.f {
+    margin-left: -54px;
 }
 
 .closet {
@@ -137,9 +145,6 @@ body {
 }
 .closeth:before {
     content: "H";
-}
-.clear {
-    clear: both;
 }
 .clear:after {
     content: "";
