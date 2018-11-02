@@ -100,7 +100,7 @@ document.addEventListener('mouseup', function(e) {
                         while (multiCards.length) {
                             reveal(activeCard, false);
                             multiCards[0].style = '';
-                            accepter.parentNode.appendChild(multiCards[0]);
+                            accepter.appendChild(multiCards[0]);
                             if (multiCards.length === 1) {
                                 reveal(multiCards[0], true);
                             }
@@ -114,6 +114,7 @@ document.addEventListener('mouseup', function(e) {
                     if (accepterSuit === movingSuit && movingNum === 1 && multiCards.length === 0) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.appendChild(activeCard);
+                        reveal(activeCard, true);
                         successfulMove = true;
                         break;
                     }
@@ -123,6 +124,7 @@ document.addEventListener('mouseup', function(e) {
                     if (accepterSuit === movingSuit && accepterNum + 1 === movingNum && multiCards.length === 0) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.parentNode.appendChild(activeCard);
+                        reveal(activeCard, true);
                         successfulMove = true;
                         break;
                     }
@@ -132,6 +134,7 @@ document.addEventListener('mouseup', function(e) {
                     if (accepterColor !== movingColor && accepterNum - 1 === movingNum) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.parentNode.appendChild(activeCard);
+                        reveal(activeCard, true);
                         while (multiCards.length) {
                             reveal(activeCard, false);
                             multiCards[0].style = '';
