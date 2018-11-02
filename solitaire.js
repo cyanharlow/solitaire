@@ -60,10 +60,6 @@ document.addEventListener('hover', function(e) {
 document.addEventListener('mouseup', function(e) {
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
-
-    window.console.log(e)
-    window.console.log(lastPosX + ',' + lastPosY);
-
     if (movingCard) {
         var movingSuit = activeCard.data.s;
         var movingNum = activeCard.data.n;
@@ -78,23 +74,35 @@ document.addEventListener('mouseup', function(e) {
             var aX0 = accepter.offsetLeft;
             var aX1 = accepter.offsetLeft + accepter.offsetWidth;
             var aY0 = accepter.offsetTop;
-            var aY1 = accepter.offsetTop + accepter.offsetHeight;
+            var aY1 = accepter.offsetTop + accepter.offsetHeight;            
 
-            window.console.log(aX0 + ',' + aY0);
-
-            var aN = accepter.data.n;
-            var aS = accepter.data.s;
-            var aC = accepter.data.colr;
-
-            var isStack = accepter.parentNode.className.indexOf('stack') > -1;
+            var isStack = accepter.className.indexOf('stack') > -1;
+            var isStackCard = accepter.parentNode.className.indexOf('stack') > -1;
+            var isCloset = accepter.className.indexOf('closet') > -1 ;
+            var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1 ;
 
             if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
-                accepter.className = accepter.className.replace(' a', '');
+                if (isStackCard) {
+                    var accepterNum = accepter.data.n;
+                    var accepterSuit = accepter.data.s;
+                    var accepterColor = accepter.data.colr;
+                    if (accepterColor !== movingColor && accepterNum - 1 === movingNum) {
+                        accepter.className = accepter.className.replace(' a', '');
+                        accepter.parentNode.appendChild(activeCard);
 
-                accepter.parentNode.appendChild(activeCard);
-                if (lastLocation.children.length) {
-                    flipOver(lastLocation.children[lastLocation.children.length - 1], true);
+                        if (lastLocation.children.length) {
+                            flipOver(lastLocation.children[lastLocation.children.length - 1], true);
+                        } else {
+                            lastLocation.className = lastLocation.className + ' a';
+                        }
+                        break;
+                    }
+                } else if (isStack) {
+                    if (movingNum === 13) {
+                        accepter.parentNode.appendChild(activeCard);
+                    }
                 }
+                
             }
         }
     }
