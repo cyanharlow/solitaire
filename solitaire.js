@@ -1,3 +1,26 @@
+
+
+var suits = ['h', 's', 'c', 'd'];
+var displays = {
+    n1: 'A',
+    n2: '2',
+    n3: '3',
+    n4: '4',
+    n5: '5',
+    n6: '6',
+    n7: '7',
+    n8: '8',
+    n9: '9',
+    n10: '10',
+    n11: 'J',
+    n12: 'Q',
+    n13: 'K'
+};
+var cards = [];
+var lastLocation;
+var movingCard = false;
+var activeCard = {};
+
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -6,17 +29,10 @@ function shuffle(a) {
     return a;
 }
 
-var lastLocation;
-var movingCard = false;
-var activeCard = {};
-
 document.addEventListener('mousedown', function(e) {
-    if (e.target.className.indexOf('cd') > -1) {
+    if (e.target.className.indexOf('cd') > -1 && !e.target.data.f) {
         movingCard = true;
         activeCard = e.target;
-        cData = activeCard.data;
-        activeCard.className = 'cd ' + cData.s + ' n' +cData.n;
-        activeCard.innerHTML = cardContents(cData.n, cData.s);
     } else {
         movingCard = false;
         activeCard.style = '';
@@ -31,29 +47,28 @@ document.addEventListener('mouseup', function(e) {
 document.addEventListener('mousemove', function(e) {
     if (movingCard) {
         var left = e.clientX - 25;
-        var top = e.clientY - 30;
+        var top = e.clientY + 30;
         activeCard.style = 'position: fixed; left: ' + left + 'px; top: ' + top + 'px';
     }
 });
 
-var startMove = setInterval(function() {
-console.log()
-}, 500);
-
-var suits = ['h', 's', 'c', 'd'];
-var cards = [];
+function flipOver(card) {
+    card.data.f = false;
+    cData = card.data;
+    card.className = 'cd ' + cData.s + ' n' +cData.n;
+    card.innerHTML = cardContents(cData.n, cData.s);
+}
 
 function cardContents(n, s) {
-    var htmls = "";
+    var htmls = displays['n' + n] + '<hr/>';
     if (n < 11) {
-        htmls = n + '<hr>';
         for (var i = 1; i < n + 1; i++) {
             htmls += '<i class="n' + i + ' ' + s + '"></i>';
         }
-        return htmls;
     } else {
-        return "r";
+        htmls += 'R';
     }
+    return htmls;
 }
 
 for (var s = 0; s < suits.length; s++) {
@@ -65,6 +80,9 @@ for (var s = 0; s < suits.length; s++) {
     }
 }
 
+cards = shuffle(cards);
+
+
 for (var i = 0; i < cards.length; i++) {
     var cardHTML = document.createElement("div");
     cardHTML.className = "cd f";
@@ -75,30 +93,28 @@ for (var i = 0; i < cards.length; i++) {
         'l': 'd',
         'm': false
     };
-    document.body.appendChild(cardHTML);
+    document.getElementById('refuse').appendChild(cardHTML);
 }
 
-function activateDrag(e, elem) {
-    elem.data.f = false;
-    elem.data.m = true;
-    elem.className = "cd " + elem.data.s + ' n' + elem.data.n;
-    elem.innerHTML = elem.data.n + '<hr/>' + cardContents(elem.data.n, elem.data.s);
-    //
-    // e.preventDefault();
-    // var elem = e.target;
-
-    elem.style.position = 'absolute';
-    // calculate the new cursor position:
-    var posL = e.clientX;
-    var posT = e.clientY;
-    // set the element's new position:
-    console.log(elem.data)
-    //
-    // elem.style.top = (elem.offsetTop - posT) + "px";
-    // elem.style.left = (elem.offsetLeft - posL) + "px";
-    // while (elem.data.m) {
-    //
-    //     elem.style.top = posT + "px";
-    //     elem.style.left = posL + "px";
-    // }
+var refuseCards = document.getElementById('refuse').children;
+var maxStack = 0;
+var nextStack = 2;
+var delay = 1;
+for (var r = 0; r < 29; r++) {
+    setTimeout(function() {
+        var sortoCard = refuseCards[refuseCards.length - 1];
+        maxStack++;
+        if (maxStack === 8) {
+            maxStack = nextStack;
+            nextStack++;
+        }
+        if (nextStack < 9) {
+            var stack = document.getElementById('stack' + maxStack);
+            stack.appendChild(sortoCard);
+            if (Number(stack.getAttribute('data-max')) == stack.children.length) {
+                flipOver(sortoCard);
+            }
+        }
+    }, delay * 20);
+    delay++;
 }
