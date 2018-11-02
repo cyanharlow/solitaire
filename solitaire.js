@@ -27,6 +27,7 @@ var availableLocations = {};
 var lastLocation = {};
 var movingCard = false;
 var activeCard = {};
+var multiCards = [];
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -45,6 +46,7 @@ document.addEventListener('mousedown', function(e) {
         movingCard = true;
         activeCard = e.target;
         lastLocation = e.target.parentNode;
+        
     } else {
         movingCard = false;
         activeCard.style = '';
@@ -60,6 +62,8 @@ document.addEventListener('hover', function(e) {
 document.addEventListener('mouseup', function(e) {
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
+
+    var successfulMove = false;
     if (movingCard) {
         var movingSuit = activeCard.data.s;
         var movingNum = activeCard.data.n;
@@ -76,34 +80,70 @@ document.addEventListener('mouseup', function(e) {
             var aY0 = accepter.offsetTop;
             var aY1 = accepter.offsetTop + accepter.offsetHeight;            
 
-            var isStack = accepter.className.indexOf('stack') > -1;
+            var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
+            var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 0;
             var isStackCard = accepter.parentNode.className.indexOf('stack') > -1;
-            var isCloset = accepter.className.indexOf('closet') > -1 ;
             var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1 ;
 
+
             if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
-                if (isStackCard) {
-                    var accepterNum = accepter.data.n;
+                if (isStack) {
+                    if (movingNum === 13) {
+                        accepter.className = accepter.className.replace(' a', '');
+                        accepter.appendChild(activeCard);
+                        while (multiCards.length) {
+                            accepter.parentNode.appendChild(multiCards[0]);
+                            multiCards.shift();
+                        }
+                        successfulMove = true;
+                        break;
+                    }
+                } else if (isCloset) {
+                    var accepterSuit = accepter.getAttribute('data-suit');
+                    if (accepterSuit === movingSuit && movingNum === 1 && multiCards.length === 0) {
+                        accepter.className = accepter.className.replace(' a', '');
+                        accepter.appendChild(activeCard);
+                        successfulMove = true;
+                        break;
+                    }
+                } else if (isClosetCard) {
                     var accepterSuit = accepter.data.s;
+                    var accepterNum = accepter.data.n;
+                    if (accepterSuit === movingSuit && accepterNum + 1 === movingNum && multiCards.length === 0) {
+                        accepter.className = accepter.className.replace(' a', '');
+                        accepter.parentNode.appendChild(activeCard);
+                        successfulMove = true;
+                        break;
+                    }
+                } else if (isStackCard) {
+                    var accepterNum = accepter.data.n;
                     var accepterColor = accepter.data.colr;
                     if (accepterColor !== movingColor && accepterNum - 1 === movingNum) {
                         accepter.className = accepter.className.replace(' a', '');
                         accepter.parentNode.appendChild(activeCard);
-
-                        if (lastLocation.children.length) {
-                            flipOver(lastLocation.children[lastLocation.children.length - 1], true);
-                        } else {
-                            lastLocation.className = lastLocation.className + ' a';
+                        while (multiCards.length) {
+                            multiCards[0].style = '';
+                            accepter.parentNode.appendChild(multiCards[0]);
+                            multiCards.shift();
                         }
+                        successfulMove = true;
                         break;
-                    }
-                } else if (isStack) {
-                    if (movingNum === 13) {
-                        accepter.parentNode.appendChild(activeCard);
                     }
                 }
                 
             }
+        }
+    }
+    if (successfulMove) {
+        if (lastLocation.children.length) {
+            flipOver(lastLocation.children[lastLocation.children.length - 1], true);
+        } else {
+            lastLocation.className = lastLocation.className + ' a';
+        }
+    } else {
+        while (multiCards.length) {
+            multiCards[multiCards.length - 1].style = '';
+            multiCards.pop();
         }
     }
     movingCard = false;
@@ -114,8 +154,17 @@ document.addEventListener('mousemove', function(e) {
     if (movingCard) {
         var left = e.clientX - 30;
         var top = e.clientY + 15;
-        activeCard.style = 'position: fixed; left: ' + left + 'px; top: ' + top + 'px';
-    }
+        var zIndex = 999999;
+        activeCard.style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
+        var grabberCard = activeCard.nextElementSibling;
+        while (activeCard.parentNode.className.indexOf('stack') > -1 && grabberCard !== null) {
+            multiCards.push(grabberCard);
+            top = top + 10;
+            zIndex = zIndex + 100;
+            grabberCard.style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
+            grabberCard = grabberCard.nextElementSibling;
+        }
+    }    
 });
 
 function flipOver(card, accepting) {

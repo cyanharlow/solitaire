@@ -1,5 +1,6 @@
 html, body {
     min-height: 100%;
+    font-family: 'Century Gothic', sans-serif;
 }
 html {
     margin: 0;
@@ -28,10 +29,10 @@ body {
     height: 60px;
     z-index: 999;
     cursor: pointer;
+    position: relative;
     box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.5);
     border-radius: 3px;
     user-select: none;
-    font-family: 'Century Gothic', sans-serif;
 }
 
 .cd * {
@@ -108,7 +109,34 @@ body {
     height: 80px;
     padding: 4px;
     margin: 0 5px 0 0;
-    position: relative;
+}
+.closet .cd {
+    margin: -75px 0 0;
+}
+.closet .cd:first-child {
+    margin: 0;
+}
+.closet:before {
+    pointer-events: none;
+    text-align: center;
+    height: 100%;
+    position: absolute;
+    width: 58px;
+    line-height: 80px;
+    font-size: 40px;
+    color: #444444;
+}
+.closets:before {
+    content: "S";
+}
+.closetd:before {
+    content: "D";
+}
+.closetc:before {
+    content: "C";
+}
+.closeth:before {
+    content: "H";
 }
 .clear {
     clear: both;
