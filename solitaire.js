@@ -59,6 +59,36 @@ document.addEventListener('hover', function(e) {
 });
 
 document.addEventListener('mouseup', function(e) {
+    var lastPosX = e.clientX;
+    var lastPosY = e.clientY;
+    if (movingCard) {
+        var movingSuit = activeCard.data.s;
+        var movingNum = activeCard.data.n;
+        var movingColor = activeCard.data.colr;
+        var accepters = document.getElementsByClassName('a');
+        for (var a = 0; a < accepters.length; a++) {
+            var accepter = accepters[a];
+            var aX0 = accepter.offsetLeft;
+            var aX1 = accepter.offsetLeft + accepter.offsetWidth;
+            var aY0 = accepter.offsetTop;
+            var aY1 = accepter.offsetTop + accepter.offsetH;
+
+            var aN = accepter.data.n;
+            var aS = accepter.data.s;
+            var aC = accepter.data.colr;
+
+            if (accepter.parentNode.className.indexOf('stack') > -1) {
+
+
+                accepter.parentNode.appendChild(activeCard);
+                flipOver(lastLocation.children[lastLocation.children.length - 1]);
+                break;
+            }
+
+
+
+        }
+    }
     movingCard = false;
     activeCard.style = '';
 });
@@ -78,8 +108,6 @@ function flipOver(card) {
     card.innerHTML = cardContents(cData.n, cData.s);
 }
 
-
-
 for (var s = 0; s < suits.length; s++) {
     for (var c = 1; c < 14; c++) {
         cards.push({
@@ -98,8 +126,8 @@ for (var i = 0; i < cards.length; i++) {
     cardHTML.data = {
         's': cards[i].suit,
         'n': cards[i].num,
-        'folded': true,
-        'accepting': false
+        'colr': cards[i].suit === 'd' || cards[i].suit === 'h' ? 'r' : 'b',
+        'folded': true
     };
     document.getElementById('refuse').appendChild(cardHTML);
 }
@@ -122,6 +150,7 @@ for (var r = 0; r < 29; r++) {
             if (Number(stack.getAttribute('data-max')) == stack.children.length) {
                 flipOver(sortoCard);
                 sortoCard.data.accepting = true;
+                sortoCard.className = sortoCard.className + ' a';
             }
         }
     }, delay * 20);
