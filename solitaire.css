@@ -7,9 +7,14 @@ html {
     background-image: linear-gradient(to right, #2b2b2b, #373737);
 }
 body {
-    padding: 50px;
+    padding: 50px 15px;
     width: 500px;
     margin: 0 auto;
+}
+
+.upper-area {
+    padding-right: 9px;
+    padding-bottom: 10px;
 }
 
 .cd {
@@ -53,6 +58,15 @@ body {
     background-image: linear-gradient(to bottom, #580000, #640000);
     border-color: #740808;
 }
+
+.cd p, .cd h2 {
+    margin: 0;
+    line-height: 1;
+}
+.cd h2 {
+    text-align: center;
+    padding: 10px 0 0;
+}
 .cd hr {
     opacity: 0.5;
     margin: 2px;
@@ -70,7 +84,7 @@ body {
 
 .stack {
     width: 14%;
-    padding-top: 50px;
+    padding-top: 60px;
     float: left;
 }
 
@@ -78,11 +92,23 @@ body {
     margin: -50px 5px 0;
 }
 .refuse-pile {
+    width: 144px;
     padding: 0 0 20px 60px;
 }
 .refuse-pile .cd {
     float: left;
-    margin: 0 0 0 -53px;
+    margin: 6px 0 10px -53px;
+}
+
+.closet {
+    float: right;
+    background-color: #222222;
+    border-radius: 2px;
+    width: 57px;
+    height: 80px;
+    padding: 4px;
+    margin: 0 5px 0 0;
+    position: relative;
 }
 .clear {
     clear: both;

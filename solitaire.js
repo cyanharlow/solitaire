@@ -1,5 +1,4 @@
-
-
+var cards = [];
 var suits = ['h', 's', 'c', 'd'];
 var displays = {
     n1: 'A',
@@ -16,8 +15,16 @@ var displays = {
     n12: 'Q',
     n13: 'K'
 };
-var cards = [];
-var lastLocation;
+var icons = {
+    h: '<span class="heart"></span>',
+    s: '<span class="spade"></span>',
+    c: '<span class="clubs"></span>',
+    d: '<span class="diamond"></span>'
+};
+
+var availableLocations = {};
+
+var lastLocation = {};
 var movingCard = false;
 var activeCard = {};
 
@@ -28,14 +35,26 @@ function shuffle(a) {
     }
     return a;
 }
+function cardContents(n, s) {
+    var htmls = '<p>' + displays['n' + n] + '</p><hr/><h2>' + s.toUpperCase() + '</h2>';
+    
+    return htmls;
+}
 
 document.addEventListener('mousedown', function(e) {
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.f) {
         movingCard = true;
         activeCard = e.target;
+        lastLocation = e.target.parentNode;
     } else {
         movingCard = false;
         activeCard.style = '';
+    }
+});
+
+document.addEventListener('hover', function(e) {
+    if (movingCard && e.target.className.indexOf('cd') > -1 && !e.target.data.f) {
+        window.console.log(e)
     }
 });
 
@@ -46,8 +65,8 @@ document.addEventListener('mouseup', function(e) {
 
 document.addEventListener('mousemove', function(e) {
     if (movingCard) {
-        var left = e.clientX - 25;
-        var top = e.clientY + 30;
+        var left = e.clientX - 30;
+        var top = e.clientY + 15;
         activeCard.style = 'position: fixed; left: ' + left + 'px; top: ' + top + 'px';
     }
 });
@@ -59,17 +78,7 @@ function flipOver(card) {
     card.innerHTML = cardContents(cData.n, cData.s);
 }
 
-function cardContents(n, s) {
-    var htmls = displays['n' + n] + '<hr/>';
-    if (n < 11) {
-        for (var i = 1; i < n + 1; i++) {
-            htmls += '<i class="n' + i + ' ' + s + '"></i>';
-        }
-    } else {
-        htmls += 'R';
-    }
-    return htmls;
-}
+
 
 for (var s = 0; s < suits.length; s++) {
     for (var c = 1; c < 14; c++) {
@@ -89,9 +98,8 @@ for (var i = 0; i < cards.length; i++) {
     cardHTML.data = {
         's': cards[i].suit,
         'n': cards[i].num,
-        'f': true,
-        'l': 'd',
-        'm': false
+        'folded': true,
+        'accepting': false
     };
     document.getElementById('refuse').appendChild(cardHTML);
 }
@@ -113,6 +121,7 @@ for (var r = 0; r < 29; r++) {
             stack.appendChild(sortoCard);
             if (Number(stack.getAttribute('data-max')) == stack.children.length) {
                 flipOver(sortoCard);
+                sortoCard.data.accepting = true;
             }
         }
     }, delay * 20);
