@@ -30,7 +30,6 @@ body {
     z-index: 999;
     cursor: pointer;
     position: relative;
-    box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.5);
     border-radius: 3px;
     user-select: none;
 }
@@ -66,11 +65,11 @@ body {
 }
 .cd h2 {
     text-align: center;
-    padding: 10px 0 0;
+    padding: 6px 0 0;
 }
 .cd hr {
     opacity: 0.5;
-    margin: 2px;
+    margin: 5px 0 0;
     border-width: 1px 0 0 0;
     border-style: solid;
 }
@@ -98,6 +97,7 @@ body {
     margin-left: 5px;
     margin-right: 5px;
     margin-top: -50px;
+    box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.5);
     transition: margin-top 0.5s;
 }
 .stack .cd:first-child {
@@ -115,6 +115,7 @@ body {
     margin-top: -50px;
     margin-right: 0;
     margin-left: 5px;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
     transition: margin-left 0.5s;
 }
 .refuse-pile .cd.f {
@@ -123,15 +124,18 @@ body {
 
 .closet {
     float: right;
-    background-color: #222222;
+    background-color: #4d4d4d;
     border-radius: 2px;
     width: 57px;
-    height: 5px;
-    padding: 75px 4px 5px;
+    height: 0px;
+    padding: 81px 4px 5px;
     margin: 0 5px 0 0;
 }
 .closet .cd {
-    margin: -70px 0 0;
+    margin: -76px 0 0;
+}
+.closet .cd:last-of-type {
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
 }
 .closet:before {
     pointer-events: none;
@@ -140,7 +144,7 @@ body {
     position: absolute;
     width: 58px;
     line-height: 40px;
-    margin: -50px 0 0;
+    margin: -58px 0 0;
     font-size: 40px;
     color: #444444;
 }

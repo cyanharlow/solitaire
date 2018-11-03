@@ -22,12 +22,29 @@ var icons = {
     d: '<span class="diamond"></span>'
 };
 
-var availableLocations = {};
-
 var lastLocation = {};
 var movingCard = false;
-var activeCard = {};
-var multiCards = [];
+var activeCards = [];
+
+var game = {
+    steps: 0,
+    stacks: {
+        stack1: [],
+        stack2: [],
+        stack3: [],
+        stack4: [],
+        stack5: [],
+        stack6: [],
+        stack7: [],
+    },
+    refuse: [],
+    closets: {
+        c: [],
+        d: [],
+        h: [],
+        s: []
+    }
+};
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -41,18 +58,37 @@ function cardContents(n, s) {
     return '<p>' + displays['n' + n] + '</p><hr/><h2>' + s.toUpperCase() + '</h2>';
 }
 
+window.onhashchange = function() {
+    renderBoard();
+};
+
 document.addEventListener('mousedown', function(e) {
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         movingCard = true;
-        activeCard = e.target;
         lastLocation = e.target.parentNode;
-        
+        activeCards.push(e.target);
+        var grabberCard = activeCards[0].nextElementSibling;
+        while (lastLocation.id.indexOf('stack') > -1 && grabberCard !== null) {
+            activeCards.push(grabberCard);
+            grabberCard = grabberCard.nextElementSibling;
+        }
     } else {
         movingCard = false;
-        activeCard.style = '';
     }
 });
 
+document.addEventListener('mousemove', function(e) {
+    if (movingCard) {
+        var left = e.clientX - 30;
+        var top = e.clientY + 15;
+        var zIndex = 999999;
+        for (var ac = 0; ac < activeCards.length; ac++) {
+            activeCards[ac].style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
+            top = top + 20;
+            zIndex = zIndex + 100;
+        }
+    }
+});
 document.addEventListener('click', function(e) {
     if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
         if (e.target.nextElementSibling) {
@@ -61,6 +97,8 @@ document.addEventListener('click', function(e) {
         if (e.target.nextElementSibling == null) {
             reveal(e.target);
         }
+        game.steps = game.steps + 1;
+        window.history.pushState(game, null, '#step' + game.steps);
     }
 });
 
@@ -68,63 +106,51 @@ document.addEventListener('mouseup', function(e) {
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
 
+    var accepterNode = null;
+    var giverNode = lastLocation.id;
+
     var successfulMove = false;
     if (movingCard) {
-        var movingSuit = activeCard.data.s;
-        var movingNum = activeCard.data.n;
-        var movingColor = activeCard.data.colr;
+        var movingSuit = activeCards[0].data.s;
+        var movingNum = activeCards[0].data.n;
+        var movingColor = activeCards[0].data.colr;
         var accepters = document.getElementsByClassName('a');
         for (var ac = 0; ac < accepters.length; ac++) {
             var accepter = accepters[ac];
-            if (accepter.data && accepter.data.id == activeCard.data.id) {
+            if (accepter.data && accepter.data.id == activeCards[0].data.id) {
                 continue;
             }
 
             var aX0 = accepter.offsetLeft;
             var aX1 = accepter.offsetLeft + accepter.offsetWidth;
             var aY0 = accepter.offsetTop;
-            var aY1 = accepter.offsetTop + accepter.offsetHeight;            
+            var aY1 = accepter.offsetTop + accepter.offsetHeight;
 
             var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
             var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 0;
             var isStackCard = accepter.parentNode.className.indexOf('stack') > -1;
             var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1 ;
 
-
             if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
                 if (isStack) {
                     if (movingNum === 13) {
-                        accepter.className = accepter.className.replace(' a', '');
-                        accepter.appendChild(activeCard);
-                        reveal(activeCard, true);
-                        while (multiCards.length) {
-                            reveal(activeCard, false);
-                            multiCards[0].style = '';
-                            accepter.appendChild(multiCards[0]);
-                            if (multiCards.length === 1) {
-                                reveal(multiCards[0], true);
-                            }
-                            multiCards.shift();
-                        }
+                        accepterNode = game.stacks[accepter.id];
+
                         successfulMove = true;
                         break;
                     }
                 } else if (isCloset) {
                     var accepterSuit = accepter.getAttribute('data-suit');
-                    if (accepterSuit === movingSuit && movingNum === 1 && multiCards.length === 0) {
-                        accepter.className = accepter.className.replace(' a', '');
-                        accepter.appendChild(activeCard);
-                        reveal(activeCard, true);
+                    if (accepterSuit === movingSuit && movingNum === 1 && activeCards.length === 1) {
+                        accepterNode = game.closets[accepter.id];
                         successfulMove = true;
                         break;
                     }
                 } else if (isClosetCard) {
                     var accepterSuit = accepter.data.s;
                     var accepterNum = accepter.data.n;
-                    if (accepterSuit === movingSuit && accepterNum + 1 === movingNum && multiCards.length === 0) {
-                        accepter.className = accepter.className.replace(' a', '');
-                        accepter.parentNode.appendChild(activeCard);
-                        reveal(activeCard, true);
+                    if (accepterSuit === movingSuit && accepterNum + 1 === movingNum && activeCards.length === 1) {
+                        accepterNode = game.closets[accepter.parentNode.id];
                         successfulMove = true;
                         break;
                     }
@@ -132,58 +158,60 @@ document.addEventListener('mouseup', function(e) {
                     var accepterNum = accepter.data.n;
                     var accepterColor = accepter.data.colr;
                     if (accepterColor !== movingColor && accepterNum - 1 === movingNum) {
-                        accepter.className = accepter.className.replace(' a', '');
-                        accepter.parentNode.appendChild(activeCard);
-                        reveal(activeCard, true);
-                        while (multiCards.length) {
-                            reveal(activeCard, false);
-                            multiCards[0].style = '';
-                            accepter.parentNode.appendChild(multiCards[0]);
-                            if (multiCards.length === 1) {
-                                reveal(multiCards[0], true);
-                            }
-                            multiCards.shift();
-                        }
+                        var accepterNode = game.stacks[accepter.parentNode.id];
+                        var giverNode = lastLocation.id;
                         successfulMove = true;
                         break;
                     }
                 }
-                
+
             }
         }
     }
     if (successfulMove) {
-        if (lastLocation.children.length) {
-            reveal(lastLocation.children[lastLocation.children.length - 1], lastLocation.className.indexOf('refuse') > -1 ? false : true);
-        } else {
-            lastLocation.className = lastLocation.className + ' a';
+        var oldStack = game.stacks[giverNode];
+
+        while (activeCards.length) {
+            if (activeCards.length === 1) {
+                activeCards[0].data.accepting = true;
+            }
+            accepterNode.push(activeCards[0].data);
+            oldStack.pop();
+
+            activeCards.shift();
         }
+        if (oldStack.length) {
+            oldStack[oldStack.length - 1].accepting = true;
+            oldStack[oldStack.length - 1].folded = false;
+        }
+
+
+        game.steps = game.steps + 1;
+        window.history.pushState(game, null, '#step' + game.steps);
+
     } else {
-        while (multiCards.length) {
-            multiCards[multiCards.length - 1].style = '';
-            multiCards.pop();
-        }
+        activeCards = []
     }
     movingCard = false;
-    activeCard.style = '';
+    renderBoard();
+
+    // activeCards.style = '';
 });
 
-document.addEventListener('mousemove', function(e) {
-    if (movingCard) {
-        var left = e.clientX - 30;
-        var top = e.clientY + 15;
-        var zIndex = 999999;
-        activeCard.style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
-        var grabberCard = activeCard.nextElementSibling;
-        while (activeCard.parentNode.className.indexOf('stack') > -1 && grabberCard !== null) {
-            multiCards.push(grabberCard);
-            top = top + 10;
-            zIndex = zIndex + 100;
-            grabberCard.style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
-            grabberCard = grabberCard.nextElementSibling;
-        }
-    }    
-});
+
+
+function renderCard(data) {
+    var newCard = document.createElement('div');
+    newCard.data = data;
+    newCard.className = 'cd ';
+    if (data.folded) {
+        newCard.className = newCard.className + 'f';
+    } else {
+        newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '');
+        newCard.innerHTML = cardContents(data.n, data.s);
+    }
+    return newCard;
+}
 
 function reveal(card, accepting) {
     card.data.folded = false;
@@ -210,40 +238,95 @@ for (var s = 0; s < suits.length; s++) {
 
 cards = shuffle(cards);
 
+function startNewGame() {
+    for (var i = 0; i < cards.length; i++) {
+        var cardHTML = document.createElement("div");
+        cardHTML.className = "cd f";
+        var data = {
+            's': cards[i].suit,
+            'n': cards[i].num,
+            'id': cards[i].suit + cards[i].num,
+            'colr': cards[i].suit === 'd' || cards[i].suit === 'h' ? 'r' : 'b',
+            'folded': true,
+            'accepting': false
+        };
+        cardHTML.data = data;
+        game.refuse.push(data);
+        // document.getElementById('refuse').appendChild(cardHTML);
+    }
 
-for (var i = 0; i < cards.length; i++) {
-    var cardHTML = document.createElement("div");
-    cardHTML.className = "cd f";
-    cardHTML.data = {
-        's': cards[i].suit,
-        'n': cards[i].num,
-        'id': cards[i].suit + cards[i].num,
-        'colr': cards[i].suit === 'd' || cards[i].suit === 'h' ? 'r' : 'b',
-        'folded': true,
-        'accepting': false
-    };
-    document.getElementById('refuse').appendChild(cardHTML);
-}
-
-var refuseCards = document.getElementById('refuse').children;
-var maxStack = 0;
-var nextStack = 2;
-var delay = 1;
-for (var r = 0; r < 29; r++) {
-    setTimeout(function() {
-        var sortoCard = refuseCards[refuseCards.length - 1];
-        maxStack++;
-        if (maxStack === 8) {
-            maxStack = nextStack;
-            nextStack++;
-        }
-        if (nextStack < 9) {
-            var stack = document.getElementById('stack' + maxStack);
-            stack.appendChild(sortoCard);
-            if (Number(stack.getAttribute('data-max')) == stack.children.length) {
-                reveal(sortoCard, true);
+    // var refuseCards = document.getElementById('refuse').children;
+    var maxStack = 0;
+    var nextStack = 2;
+    var delay = 1;
+    for (var r = 0; r < 29; r++) {
+            var sortoObject = game.refuse[game.refuse.length - 1];
+            game.refuse.pop();
+            // var sortoCard = refuseCards[refuseCards.length - 1];
+            maxStack++;
+            if (maxStack === 8 || maxStack === 1) {
+                sortoObject.folded = false;
+                sortoObject.accepting = true;
             }
-        }
-    }, delay * 20);
-    delay++;
+            if (maxStack === 8) {
+                maxStack = nextStack;
+                nextStack++;
+            }
+
+            if (nextStack < 9) {
+                // var stack = document.getElementById('stack' + maxStack);
+                // stack.appendChild(sortoCard);
+                game.stacks['stack' + maxStack].push(sortoObject)
+                // if (Number(stack.getAttribute('data-max')) == stack.children.length) {
+                //     reveal(sortoCard, true);
+                // }
+            }
+        delay++;
+    }
+    window.history.pushState(game, null, '#step0');
 }
+
+function renderBoard() {
+    var currentGame = history.state;
+    document.body.innerHTML = '';
+    var board = document.createElement('div');
+    var upperArea = document.createElement('div');
+    upperArea.className = 'upper-area clear';
+    for (var gc in currentGame.closets) {
+        var closet = document.createElement('div');
+        var cardsInCloset = currentGame.closets[gc];
+        closet.id = gc;
+        closet.className = 'closet closet' + gc + (cardsInCloset.length ? '' : ' a');
+        closet.setAttribute('data-suit', gc);
+        for (var c = 0; c < cardsInCloset.length; c++) {
+            closet.appendChild(renderCard(cardsInCloset[c]));
+        }
+        upperArea.appendChild(closet);
+    }
+    var refuse = document.createElement('div');
+    refuse.className = 'refuse-pile clear';
+    for (var r = 0; r < currentGame.refuse.length; r++) {
+        refuse.appendChild(renderCard(currentGame.refuse[r]));
+    }
+    upperArea.appendChild(refuse);
+    board.appendChild(upperArea);
+    var stacks = document.createElement('div');
+    stacks.className = 'stacks clear';
+    var sn = 0;
+    for (var st in currentGame.stacks) {
+        sn++;
+        var stack = document.createElement('div');
+        var childStackCards = currentGame.stacks[st];
+
+        stack.id = 'stack' + sn;
+        stack.className = 'stack' + (childStackCards.length ? '' : ' a');
+        for (var f = 0; f < childStackCards.length; f++) {
+            stack.appendChild(renderCard(childStackCards[f]));
+        }
+        stacks.appendChild(stack);
+    }
+    board.appendChild(stacks);
+    document.body.appendChild(board)
+}
+startNewGame();
+renderBoard();
