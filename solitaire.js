@@ -63,37 +63,38 @@ window.onhashchange = function() {
 };
 
 document.addEventListener('mousedown', function(e) {
-    var lastPosX = e.pageX
-    var lastPosY = e.pageY;
-    startDrag(e, lastPosX, lastPosY);
+    window.console.log('mousedown')
+    startDrag(e, false);
 });
- document.addEventListener('touchstart', function(e) {
-     var lastPosX = e.changedTouches[0].clientX
-     var lastPosY = e.changedTouches[0].clientY;
-     startDrag(e, lastPosX, lastPosY);
- });
 
 document.addEventListener('mousemove', function(e) {
+    window.console.log('mousemove')
+
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
     moveDrag(e, lastPosX, lastPosY);
 });
 // document.addEventListener('touchmove', function(e) {
+//     window.console.log('touchmove')
+//
 //     var lastPosX = e.changedTouches[0].clientX
 //     var lastPosY = e.changedTouches[0].clientY;
 //     moveDrag(e, lastPosX, lastPosY);
 // });
 
 document.addEventListener('mouseup', function(e) {
+    window.console.log('mouseup')
+
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
     stopDrag(e, lastPosX, lastPosY);
 });
-document.addEventListener('touchend', function(e) {
-    var lastPosX = e.changedTouches[0].clientX
-    var lastPosY = e.changedTouches[0].clientY;
-    stopDrag(e, lastPosX, lastPosY);
-});
+// document.addEventListener('touchend', function(e) {
+//     window.console.log('touchend')
+//     var lastPosX = e.changedTouches[0].clientX
+//     var lastPosY = e.changedTouches[0].clientY;
+//     stopDrag(e, lastPosX, lastPosY);
+// });
 
 function renderCard(data) {
     var newCard = document.createElement('div');
@@ -119,9 +120,9 @@ for (var s = 0; s < suits.length; s++) {
 
 cards = shuffle(cards);
 
-function startDrag(e) {
+function startDrag(e, isMobile) {
+
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
-        movingCard = true;
         lastLocation = e.target.parentNode;
         activeCards.push(e.target);
         var grabberCard = activeCards[0].nextElementSibling;
@@ -129,6 +130,7 @@ function startDrag(e) {
             activeCards.push(grabberCard);
             grabberCard = grabberCard.nextElementSibling;
         }
+        movingCard = true;
     } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
         movingCard = false;
 
@@ -139,15 +141,12 @@ function startDrag(e) {
             game.refuse.unshift(thisLast);
         }
         game.refuse[game.refuse.length - 1].folded = false;
-        game.steps = game.steps + 1;
-        window.history.pushState(game, null, '#step' + game.steps);
-        renderBoard();
-
     } else {
         movingCard = false;
     }
 }
 function moveDrag(e, lastPosX, lastPosY) {
+    window.console.log(activeCards)
     if (movingCard) {
         var left = lastPosX - 30;
         var top = lastPosY + 15;
@@ -243,13 +242,12 @@ function stopDrag(e, lastPosX, lastPosY) {
             }
             oldStack[oldStack.length - 1].folded = false;
         }
-        game.steps = game.steps + 1;
-        window.history.pushState(game, null, '#step' + game.steps);
-
     } else {
         activeCards = []
     }
     movingCard = false;
+    game.steps = game.steps + 1;
+    window.history.pushState(game, null, '#step' + game.steps);
     renderBoard();
 }
 
