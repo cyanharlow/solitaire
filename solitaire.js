@@ -62,7 +62,40 @@ window.onhashchange = function() {
     renderBoard();
 };
 
-document.addEventListener('mousedown', function(e) {
+document.addEventListener('mousedown', function(e) { startDrag(e); });
+// document.addEventListener('touchstart', function(e) { startDrag(e); });
+
+document.addEventListener('mousemove', function(e) { moveDrag(e); });
+document.addEventListener('touchmove', function(e) { moveDrag(e); });
+
+document.addEventListener('mouseup', function(e) { stopDrag(e); });
+document.addEventListener('touchend', function(e) { stopDrag(e); });
+
+function renderCard(data) {
+    var newCard = document.createElement('div');
+    newCard.data = data;
+    newCard.className = 'cd ';
+    if (data.folded) {
+        newCard.className = newCard.className + 'f';
+    } else {
+        newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '');
+        newCard.innerHTML = cardContents(data.n, data.s);
+    }
+    return newCard;
+}
+
+for (var s = 0; s < suits.length; s++) {
+    for (var c = 1; c < 14; c++) {
+        cards.push({
+            suit: suits[s],
+            num: c
+        });
+    }
+}
+
+cards = shuffle(cards);
+
+function startDrag(e) {
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         movingCard = true;
         lastLocation = e.target.parentNode;
@@ -89,9 +122,8 @@ document.addEventListener('mousedown', function(e) {
     } else {
         movingCard = false;
     }
-});
-
-document.addEventListener('mousemove', function(e) {
+}
+function moveDrag(e) {
     if (movingCard) {
         var left = e.clientX - 30;
         var top = e.clientY + 15;
@@ -102,9 +134,8 @@ document.addEventListener('mousemove', function(e) {
             zIndex = zIndex + 100;
         }
     }
-});
-
-document.addEventListener('mouseup', function(e) {
+}
+function stopDrag(e) {
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
 
@@ -191,8 +222,6 @@ document.addEventListener('mouseup', function(e) {
             }
             oldStack[oldStack.length - 1].folded = false;
         }
-
-
         game.steps = game.steps + 1;
         window.history.pushState(game, null, '#step' + game.steps);
 
@@ -201,35 +230,7 @@ document.addEventListener('mouseup', function(e) {
     }
     movingCard = false;
     renderBoard();
-
-    // activeCards.style = '';
-});
-
-
-
-function renderCard(data) {
-    var newCard = document.createElement('div');
-    newCard.data = data;
-    newCard.className = 'cd ';
-    if (data.folded) {
-        newCard.className = newCard.className + 'f';
-    } else {
-        newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '');
-        newCard.innerHTML = cardContents(data.n, data.s);
-    }
-    return newCard;
 }
-
-for (var s = 0; s < suits.length; s++) {
-    for (var c = 1; c < 14; c++) {
-        cards.push({
-            suit: suits[s],
-            num: c
-        });
-    }
-}
-
-cards = shuffle(cards);
 
 function startNewGame() {
     for (var i = 0; i < cards.length; i++) {
@@ -245,36 +246,25 @@ function startNewGame() {
         };
         cardHTML.data = data;
         game.refuse.push(data);
-        // document.getElementById('refuse').appendChild(cardHTML);
     }
 
-    // var refuseCards = document.getElementById('refuse').children;
     var maxStack = 0;
     var nextStack = 2;
-    var delay = 1;
     for (var r = 0; r < 29; r++) {
-            var sortoObject = game.refuse[game.refuse.length - 1];
-            game.refuse.pop();
-            // var sortoCard = refuseCards[refuseCards.length - 1];
-            maxStack++;
-            if (maxStack === 8 || maxStack === 1) {
-                sortoObject.folded = false;
-                sortoObject.accepting = true;
-            }
-            if (maxStack === 8) {
-                maxStack = nextStack;
-                nextStack++;
-            }
-
-            if (nextStack < 9) {
-                // var stack = document.getElementById('stack' + maxStack);
-                // stack.appendChild(sortoCard);
-                game.stacks['stack' + maxStack].push(sortoObject)
-                // if (Number(stack.getAttribute('data-max')) == stack.children.length) {
-                //     reveal(sortoCard, true);
-                // }
-            }
-        delay++;
+        var sortoObject = game.refuse[game.refuse.length - 1];
+        game.refuse.pop();
+        maxStack++;
+        if (maxStack === 8 || maxStack === 1) {
+            sortoObject.folded = false;
+            sortoObject.accepting = true;
+        }
+        if (maxStack === 8) {
+            maxStack = nextStack;
+            nextStack++;
+        }
+        if (nextStack < 9) {
+            game.stacks['stack' + maxStack].push(sortoObject)
+        }
     }
     window.history.pushState(game, null, '#step0');
 }
