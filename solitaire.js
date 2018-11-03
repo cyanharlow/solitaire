@@ -63,7 +63,6 @@ window.onhashchange = function() {
 };
 
 document.addEventListener('mousedown', function(e) {
-    window.console.log(e)
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         movingCard = true;
         lastLocation = e.target.parentNode;
@@ -173,6 +172,9 @@ document.addEventListener('mouseup', function(e) {
     }
     if (successfulMove) {
         var oldStack = game.stacks[giverNode];
+        if (giverNode === 'refuse') {
+            oldStack = game['refuse'];
+        }
 
         while (activeCards.length) {
             if (activeCards.length === 1) {
@@ -184,7 +186,9 @@ document.addEventListener('mouseup', function(e) {
             activeCards.shift();
         }
         if (oldStack.length) {
-            oldStack[oldStack.length - 1].accepting = true;
+            if (giverNode !== 'refuse') {
+                oldStack[oldStack.length - 1].accepting = true;
+            }
             oldStack[oldStack.length - 1].folded = false;
         }
 
@@ -294,6 +298,7 @@ function renderBoard() {
     }
     var refuse = document.createElement('div');
     refuse.className = 'refuse-pile clear';
+    refuse.id = 'refuse';
     for (var r = 0; r < currentGame.refuse.length; r++) {
         refuse.appendChild(renderCard(currentGame.refuse[r]));
     }
