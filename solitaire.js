@@ -63,24 +63,24 @@ window.onhashchange = function() {
 };
 
 document.addEventListener('mousedown', function(e) {
-    window.console.log('mousedown')
     startDrag(e, false);
 });
+//
+// document.addEventListener('touchstart', function(e) {
+//     window.console.log('touchstart')
+//     startDrag(e, false);
+// });
 
 document.addEventListener('mousemove', function(e) {
-    window.console.log('mousemove')
-
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
     moveDrag(e, lastPosX, lastPosY);
 });
-// document.addEventListener('touchmove', function(e) {
-//     window.console.log('touchmove')
-//
-//     var lastPosX = e.changedTouches[0].clientX
-//     var lastPosY = e.changedTouches[0].clientY;
-//     moveDrag(e, lastPosX, lastPosY);
-// });
+document.addEventListener('touchmove', function(e) {
+    var lastPosX = e.changedTouches[0].clientX
+    var lastPosY = e.changedTouches[0].clientY;
+    moveDrag(e, lastPosX, lastPosY);
+});
 
 document.addEventListener('mouseup', function(e) {
     window.console.log('mouseup')
@@ -121,7 +121,7 @@ for (var s = 0; s < suits.length; s++) {
 cards = shuffle(cards);
 
 function startDrag(e, isMobile) {
-
+    activeCards = [];
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         lastLocation = e.target.parentNode;
         activeCards.push(e.target);
@@ -132,8 +132,6 @@ function startDrag(e, isMobile) {
         }
         movingCard = true;
     } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
-        movingCard = false;
-
         if (e.target.nextElementSibling) {
             var thisLast = game.refuse[game.refuse.length - 1];
             thisLast.folded = true;
@@ -141,13 +139,13 @@ function startDrag(e, isMobile) {
             game.refuse.unshift(thisLast);
         }
         game.refuse[game.refuse.length - 1].folded = false;
-    } else {
         movingCard = false;
+        window.console.log(e)
+        e.target.onmouseup = true;
     }
 }
 function moveDrag(e, lastPosX, lastPosY) {
-    window.console.log(activeCards)
-    if (movingCard) {
+    if (movingCard && activeCards.length) {
         var left = lastPosX - 30;
         var top = lastPosY + 15;
         var zIndex = 999999;
@@ -158,12 +156,13 @@ function moveDrag(e, lastPosX, lastPosY) {
         }
     }
 }
+
 function stopDrag(e, lastPosX, lastPosY) {
     var accepterNode = null;
     var giverNode = lastLocation.id;
 
     var successfulMove = false;
-    if (movingCard) {
+    if (movingCard && activeCards.length) {
         var movingSuit = activeCards[0].data.s;
         var movingNum = activeCards[0].data.n;
         var movingColor = activeCards[0].data.colr;
@@ -220,35 +219,38 @@ function stopDrag(e, lastPosX, lastPosY) {
 
             }
         }
-    }
-    if (successfulMove) {
-        var oldStack = game.stacks[giverNode];
-        if (giverNode === 'refuse') {
-            oldStack = game['refuse'];
+
+        if (successfulMove) {
+            var oldStack = game.stacks[giverNode];
+            if (giverNode === 'refuse') {
+                oldStack = game['refuse'];
+            }
+
+            while (activeCards.length) {
+                if (activeCards.length === 1) {
+                    activeCards[0].data.accepting = true;
+                }
+                accepterNode.push(activeCards[0].data);
+                oldStack.pop();
+
+                activeCards.shift();
+            }
+            if (oldStack.length) {
+                if (giverNode !== 'refuse') {
+                    oldStack[oldStack.length - 1].accepting = true;
+                }
+                oldStack[oldStack.length - 1].folded = false;
+            }
         }
 
-        while (activeCards.length) {
-            if (activeCards.length === 1) {
-                activeCards[0].data.accepting = true;
-            }
-            accepterNode.push(activeCards[0].data);
-            oldStack.pop();
-
-            activeCards.shift();
-        }
-        if (oldStack.length) {
-            if (giverNode !== 'refuse') {
-                oldStack[oldStack.length - 1].accepting = true;
-            }
-            oldStack[oldStack.length - 1].folded = false;
-        }
-    } else {
-        activeCards = []
+        // renderBoard();
     }
     movingCard = false;
+    activeCards = [];
     game.steps = game.steps + 1;
     window.history.pushState(game, null, '#step' + game.steps);
     renderBoard();
+
 }
 
 function startNewGame() {
@@ -269,7 +271,7 @@ function startNewGame() {
 
     var maxStack = 0;
     var nextStack = 2;
-    for (var r = 0; r < 29; r++) {
+    for (var r = 0; r < 28; r++) {
         var sortoObject = game.refuse[game.refuse.length - 1];
         game.refuse.pop();
         maxStack++;
