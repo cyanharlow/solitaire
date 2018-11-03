@@ -62,14 +62,38 @@ window.onhashchange = function() {
     renderBoard();
 };
 
-document.addEventListener('mousedown', function(e) { startDrag(e); });
-// document.addEventListener('touchstart', function(e) { startDrag(e); });
+document.addEventListener('mousedown', function(e) {
+    var lastPosX = e.pageX
+    var lastPosY = e.pageY;
+    startDrag(e, lastPosX, lastPosY);
+});
+ document.addEventListener('touchstart', function(e) {
+     var lastPosX = e.changedTouches[0].clientX
+     var lastPosY = e.changedTouches[0].clientY;
+     startDrag(e, lastPosX, lastPosY);
+ });
 
-document.addEventListener('mousemove', function(e) { moveDrag(e); });
-document.addEventListener('touchmove', function(e) { moveDrag(e); });
+document.addEventListener('mousemove', function(e) {
+    var lastPosX = e.pageX
+    var lastPosY = e.pageY;
+    moveDrag(e, lastPosX, lastPosY);
+});
+// document.addEventListener('touchmove', function(e) {
+//     var lastPosX = e.changedTouches[0].clientX
+//     var lastPosY = e.changedTouches[0].clientY;
+//     moveDrag(e, lastPosX, lastPosY);
+// });
 
-document.addEventListener('mouseup', function(e) { stopDrag(e); });
-document.addEventListener('touchend', function(e) { stopDrag(e); });
+document.addEventListener('mouseup', function(e) {
+    var lastPosX = e.pageX
+    var lastPosY = e.pageY;
+    stopDrag(e, lastPosX, lastPosY);
+});
+document.addEventListener('touchend', function(e) {
+    var lastPosX = e.changedTouches[0].clientX
+    var lastPosY = e.changedTouches[0].clientY;
+    stopDrag(e, lastPosX, lastPosY);
+});
 
 function renderCard(data) {
     var newCard = document.createElement('div');
@@ -123,10 +147,10 @@ function startDrag(e) {
         movingCard = false;
     }
 }
-function moveDrag(e) {
+function moveDrag(e, lastPosX, lastPosY) {
     if (movingCard) {
-        var left = e.clientX - 30;
-        var top = e.clientY + 15;
+        var left = lastPosX - 30;
+        var top = lastPosY + 15;
         var zIndex = 999999;
         for (var ac = 0; ac < activeCards.length; ac++) {
             activeCards[ac].style = 'position: fixed; z-index: ' + zIndex + '; left: ' + left + 'px; top: ' + top + 'px';
@@ -135,10 +159,7 @@ function moveDrag(e) {
         }
     }
 }
-function stopDrag(e) {
-    var lastPosX = e.pageX
-    var lastPosY = e.pageY;
-
+function stopDrag(e, lastPosX, lastPosY) {
     var accepterNode = null;
     var giverNode = lastLocation.id;
 
