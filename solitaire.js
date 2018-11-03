@@ -63,11 +63,10 @@ window.onhashchange = function() {
 };
 
 document.addEventListener('mousedown', function(e) {
-    startDrag(e, false);
+    startDrag(e);
 });
 //
 // document.addEventListener('touchstart', function(e) {
-//     window.console.log('touchstart')
 //     startDrag(e, false);
 // });
 
@@ -83,14 +82,11 @@ document.addEventListener('touchmove', function(e) {
 });
 
 document.addEventListener('mouseup', function(e) {
-    window.console.log('mouseup')
-
     var lastPosX = e.pageX
     var lastPosY = e.pageY;
     stopDrag(e, lastPosX, lastPosY);
 });
 // document.addEventListener('touchend', function(e) {
-//     window.console.log('touchend')
 //     var lastPosX = e.changedTouches[0].clientX
 //     var lastPosY = e.changedTouches[0].clientY;
 //     stopDrag(e, lastPosX, lastPosY);
@@ -100,6 +96,9 @@ function renderCard(data) {
     var newCard = document.createElement('div');
     newCard.data = data;
     newCard.className = 'cd ';
+    newCard.onclick = function() {
+        return false;
+    };
     if (data.folded) {
         newCard.className = newCard.className + 'f';
     } else {
@@ -120,7 +119,7 @@ for (var s = 0; s < suits.length; s++) {
 
 cards = shuffle(cards);
 
-function startDrag(e, isMobile) {
+function startDrag(e) {
     activeCards = [];
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         lastLocation = e.target.parentNode;
@@ -140,7 +139,6 @@ function startDrag(e, isMobile) {
         }
         game.refuse[game.refuse.length - 1].folded = false;
         movingCard = false;
-        window.console.log(e)
         e.target.onmouseup = true;
     }
 }
@@ -242,7 +240,6 @@ function stopDrag(e, lastPosX, lastPosY) {
                 oldStack[oldStack.length - 1].folded = false;
             }
         }
-
         // renderBoard();
     }
     movingCard = false;
