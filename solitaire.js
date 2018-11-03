@@ -219,7 +219,8 @@ for (var i = 0; i < cards.length; i++) {
         'n': cards[i].num,
         'id': cards[i].suit + cards[i].num,
         'colr': cards[i].suit === 'd' || cards[i].suit === 'h' ? 'r' : 'b',
-        'folded': true
+        'folded': true,
+        'accepting': false
     };
     document.getElementById('refuse').appendChild(cardHTML);
 }

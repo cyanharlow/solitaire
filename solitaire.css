@@ -89,20 +89,30 @@ body {
 
 .stack {
     width: 14%;
-    padding-top: 60px;
+    padding-top: 70px;
     float: left;
 }
 
 .stack .cd {
-    margin: -50px 5px 0;
+    margin-bottom: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: -50px;
+    transition: margin-top 0.5s;
+}
+.stack .cd:first-child {
+    margin-top: -60px;
+}
+.stack .cd.f {
+    margin-top: -60px;
 }
 .refuse-pile {
     width: 144px;
-    padding: 0 0 20px 60px;
+    padding: 50px 0 0 60px;
 }
 .refuse-pile .cd {
     float: left;
-    margin-top: 6px;
+    margin-top: -50px;
     margin-right: 0;
     margin-left: 5px;
     transition: margin-left 0.5s;
@@ -116,23 +126,21 @@ body {
     background-color: #222222;
     border-radius: 2px;
     width: 57px;
-    height: 80px;
-    padding: 4px;
+    height: 5px;
+    padding: 75px 4px 5px;
     margin: 0 5px 0 0;
 }
 .closet .cd {
-    margin: -75px 0 0;
-}
-.closet .cd:first-child {
-    margin: 0;
+    margin: -70px 0 0;
 }
 .closet:before {
     pointer-events: none;
     text-align: center;
-    height: 100%;
+    height: 56px;
     position: absolute;
     width: 58px;
-    line-height: 80px;
+    line-height: 40px;
+    margin: -50px 0 0;
     font-size: 40px;
     color: #444444;
 }
