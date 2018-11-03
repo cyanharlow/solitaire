@@ -194,6 +194,8 @@ function stopDrag(e, lastPosX, lastPosY) {
             var oldStack = game.stacks[giverNode];
             if (giverNode === 'refuse') {
                 oldStack = game['refuse'];
+            } else if (giverNode.indexOf('stack') === -1) {
+                oldStack = game.closets[giverNode];
             }
 
             while (activeCards.length) {
@@ -222,10 +224,7 @@ function stopDrag(e, lastPosX, lastPosY) {
 
 }
 
-function startNewGame(restarting) {
-    if (restarting) {
-        alert('Yay you finished!');
-    }
+function startNewGame() {
     cards = [];
     game = {
         steps: 0,
@@ -290,6 +289,8 @@ function startNewGame(restarting) {
         }
     }
     window.history.pushState(game, null, '#step0');
+    renderBoard();
+
 }
 
 function renderBoard() {
@@ -318,7 +319,7 @@ function renderBoard() {
     refuse.className = 'refuse-pile clear';
     refuse.id = 'refuse';
     for (var r = 0; r < currentGame.refuse.length; r++) {
-        if (currentGame.refuse[r]) {
+        if (currentGame.refuse[r].folded) {
             isFinished = false;
         }
         refuse.appendChild(renderCard(currentGame.refuse[r]));
@@ -347,8 +348,9 @@ function renderBoard() {
     document.body.appendChild(board);
 
     if (isFinished) {
+        alert('Yay you finished!');
+
         startNewGame(true);
     }
 }
 startNewGame();
-renderBoard();
