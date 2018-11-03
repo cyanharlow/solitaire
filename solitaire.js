@@ -63,6 +63,7 @@ window.onhashchange = function() {
 };
 
 document.addEventListener('mousedown', function(e) {
+    window.console.log(e)
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
         movingCard = true;
         lastLocation = e.target.parentNode;
@@ -72,6 +73,20 @@ document.addEventListener('mousedown', function(e) {
             activeCards.push(grabberCard);
             grabberCard = grabberCard.nextElementSibling;
         }
+    } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
+        movingCard = false;
+
+        if (e.target.nextElementSibling) {
+            var thisLast = game.refuse[game.refuse.length - 1];
+            thisLast.folded = true;
+            game.refuse.pop();
+            game.refuse.unshift(thisLast);
+        }
+        game.refuse[game.refuse.length - 1].folded = false;
+        game.steps = game.steps + 1;
+        window.history.pushState(game, null, '#step' + game.steps);
+        renderBoard();
+
     } else {
         movingCard = false;
     }
@@ -87,18 +102,6 @@ document.addEventListener('mousemove', function(e) {
             top = top + 20;
             zIndex = zIndex + 100;
         }
-    }
-});
-document.addEventListener('click', function(e) {
-    if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
-        if (e.target.nextElementSibling) {
-            tuck(e.target.nextElementSibling);
-        }
-        if (e.target.nextElementSibling == null) {
-            reveal(e.target);
-        }
-        game.steps = game.steps + 1;
-        window.history.pushState(game, null, '#step' + game.steps);
     }
 });
 
@@ -211,20 +214,6 @@ function renderCard(data) {
         newCard.innerHTML = cardContents(data.n, data.s);
     }
     return newCard;
-}
-
-function reveal(card, accepting) {
-    card.data.folded = false;
-    cData = card.data;
-    card.className = 'cd ' + cData.s + ' n' + cData.n + (accepting ? ' a' : '');
-    card.innerHTML = cardContents(cData.n, cData.s);
-}
-
-function tuck(card) {
-    card.data.folded = true;
-    card.className = 'cd f';
-    card.innerHTML = '';
-    card.parentNode.insertBefore(card, card.parentNode.firstChild);
 }
 
 for (var s = 0; s < suits.length; s++) {
