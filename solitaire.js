@@ -26,25 +26,7 @@ var lastLocation = {};
 var movingCard = false;
 var activeCards = [];
 
-var game = {
-    steps: 0,
-    stacks: {
-        stack1: [],
-        stack2: [],
-        stack3: [],
-        stack4: [],
-        stack5: [],
-        stack6: [],
-        stack7: [],
-    },
-    refuse: [],
-    closets: {
-        c: [],
-        d: [],
-        h: [],
-        s: []
-    }
-};
+var game = {};
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -108,16 +90,6 @@ function renderCard(data) {
     return newCard;
 }
 
-for (var s = 0; s < suits.length; s++) {
-    for (var c = 1; c < 14; c++) {
-        cards.push({
-            suit: suits[s],
-            num: c
-        });
-    }
-}
-
-cards = shuffle(cards);
 
 function startDrag(e) {
     activeCards = [];
@@ -250,7 +222,40 @@ function stopDrag(e, lastPosX, lastPosY) {
 
 }
 
-function startNewGame() {
+function startNewGame(restarting) {
+    if (restarting) {
+        alert('Yay you finished!');
+    }
+    cards = [];
+    game = {
+        steps: 0,
+        stacks: {
+            stack1: [],
+            stack2: [],
+            stack3: [],
+            stack4: [],
+            stack5: [],
+            stack6: [],
+            stack7: [],
+        },
+        refuse: [],
+        closets: {
+            c: [],
+            d: [],
+            h: [],
+            s: []
+        }
+    };
+    for (var s = 0; s < suits.length; s++) {
+        for (var c = 1; c < 14; c++) {
+            cards.push({
+                suit: suits[s],
+                num: c
+            });
+        }
+    }
+
+    cards = shuffle(cards);
     for (var i = 0; i < cards.length; i++) {
         var cardHTML = document.createElement("div");
         cardHTML.className = "cd f";
@@ -288,6 +293,8 @@ function startNewGame() {
 }
 
 function renderBoard() {
+
+    var isFinished = true;
     var currentGame = history.state;
     document.body.innerHTML = '';
     var board = document.createElement('div');
@@ -300,6 +307,9 @@ function renderBoard() {
         closet.className = 'closet closet' + gc + (cardsInCloset.length ? '' : ' a');
         closet.setAttribute('data-suit', gc);
         for (var c = 0; c < cardsInCloset.length; c++) {
+            if (cardsInCloset[c].folded) {
+                isFinished = false;
+            }
             closet.appendChild(renderCard(cardsInCloset[c]));
         }
         upperArea.appendChild(closet);
@@ -308,6 +318,9 @@ function renderBoard() {
     refuse.className = 'refuse-pile clear';
     refuse.id = 'refuse';
     for (var r = 0; r < currentGame.refuse.length; r++) {
+        if (currentGame.refuse[r]) {
+            isFinished = false;
+        }
         refuse.appendChild(renderCard(currentGame.refuse[r]));
     }
     upperArea.appendChild(refuse);
@@ -323,12 +336,19 @@ function renderBoard() {
         stack.id = 'stack' + sn;
         stack.className = 'stack' + (childStackCards.length ? '' : ' a');
         for (var f = 0; f < childStackCards.length; f++) {
+            if (childStackCards[f].folded) {
+                isFinished = false;
+            }
             stack.appendChild(renderCard(childStackCards[f]));
         }
         stacks.appendChild(stack);
     }
     board.appendChild(stacks);
-    document.body.appendChild(board)
+    document.body.appendChild(board);
+
+    if (isFinished) {
+        startNewGame(true);
+    }
 }
 startNewGame();
 renderBoard();
