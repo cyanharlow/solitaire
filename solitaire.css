@@ -16,10 +16,165 @@ body {
     padding-bottom: 10px;
 }
 
+.numd {
+    text-align: center;
+}
+.numd.len10 .icon {
+    width: 6px;
+    height: 6px;
+    margin: 2px;
+}
+.numd.len9 .icon {
+    width: 6px;
+    height: 6px;
+    margin: 2px;
+}
+.numd.len8 .icon {
+    width: 8px;
+    height: 8px;
+    margin: 2px;
+}
+.numd.len7 .icon {
+    width: 8px;
+    height: 8px;
+    margin: 2px;
+}
+.numd.len6 .icon {
+    width: 8px;
+    height: 8px;
+    margin: 7px 2px 1px;
+}
+.numd.len5 .icon {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+}
+.numd.len4 .icon {
+    width: 10px;
+    height: 10px;
+    margin: 2px;
+}
+.numd.len3 .icon {
+    width: 8px;
+    height: 8px;
+    margin: 4px auto 0;
+    display: block;
+}
+.numd.len2 .icon {
+    width: 15px;
+    height: 15px;
+    margin: 9px 0px 1px 3px;
+}
+.numd.len1 .icon {
+    width: 25px;
+    height: 25px;
+    margin: 7px auto 0;
+}
+
+.icon {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+}
+.icon span {
+    display: block;
+}
+
+.icon.heart span,
+.icon.diamond span {
+    background: #800000;
+}
+
+.icon.spade span,
+.icon.club span {
+    background: #333333;
+}
+
+.icon.diamond {
+    transform: scaleX(0.7);
+}
+.icon.diamond span {
+    width: 70%;
+    height: 70%;
+    margin-top: 27%;
+    transform: rotate(45deg);
+}
+
+.icon.heart .a,
+.icon.heart .b {
+    border-radius: 50%;
+    width: 50%;
+    height: 50%;
+    margin-top: 14%;
+}
+.icon.heart .a {
+    float: left;
+}
+.icon.heart .b {
+    float: right;
+}
+.icon.heart .c {
+    transform: rotate(45deg);
+    width: 57%;
+    height: 57%;
+    margin-left: 23%;
+    margin-top: 33%;
+}
+
+.icon.spade .a,
+.icon.spade .b {
+    border-radius: 50%;
+    width: 43%;
+    height: 50%;
+    margin-top: 14%;
+}
+.icon.spade .c {
+    transform: rotate(45deg);
+    width: 55%;
+    height: 55%;
+    margin-left: 23%;
+    margin-top: 26%;
+    margin-bottom: -44%;
+}
+.icon.spade .a {
+    float: left;
+}
+.icon.spade .b {
+    float: right;
+}
+.icon.spade .d {
+    margin: 0 auto 0;
+    width: 13%;
+    height: 78%;
+}
+
+.icon.club .a,
+.icon.club .b,
+.icon.club .c {
+    border-radius: 50%;
+    width: 44%;
+    height: 44%;
+}
+.icon.club .a {
+    margin: 8% auto -13%;
+}
+.icon.club .b {
+    float: left;
+}
+.icon.club .c {
+    float: right;
+}
+.icon.club .d {
+    margin: 0 auto 0;
+    width: 15%;
+    height: 70%;
+}
+
 .cd {
     overflow: hidden;
     font-weight: bold;
     padding: 3px;
+    text-align: right;
     border: 5px solid #222222;
     margin: 5px;
     float: left;
@@ -56,7 +211,10 @@ body {
     background-image: linear-gradient(to bottom, #580000, #640000);
     border-color: #740808;
 }
-
+.cd p {
+    float: left;
+    padding: 0 0 5px;
+}
 .cd p, .cd h2 {
     margin: 0;
     line-height: 1;
@@ -67,9 +225,10 @@ body {
 }
 .cd hr {
     opacity: 0.5;
-    margin: 5px 0 0;
+    margin: 0;
     border-width: 1px 0 0 0;
     border-style: solid;
+    clear: both;
 }
 .cd i {
     display: inline-block;

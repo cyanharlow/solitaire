@@ -16,11 +16,24 @@ var displays = {
     n13: 'K'
 };
 var icons = {
-    h: '<span class="heart"></span>',
-    s: '<span class="spade"></span>',
-    c: '<span class="clubs"></span>',
-    d: '<span class="diamond"></span>'
+    h: '<div class="icon heart"><span class="a"></span><span class="b"></span><span class="c"></span></div>',
+    s: '<div class="icon spade"><span class="c"></span><span class="a"></span><span class="b"></span><span class="d"></span></div>',
+    c: '<div class="icon club"><span class="a"></span><span class="b"></span><span class="c"></span><span class="d"></span></div>',
+    d: '<div class="icon diamond"><span></span></div>'
 };
+
+function getAllIcons(n, s) {
+    if (n < 11) {
+        var htmls = '<div class="numd len' + n + '">';
+
+        for (var b = 0; b < n; b++) {
+            htmls += icons[s];
+        }
+        htmls += '</div>';
+        return htmls;
+    }
+    return '<h2>' + displays['n' + n] + '</h2>';
+}
 
 var lastLocation = {};
 var movingCard = false;
@@ -37,7 +50,7 @@ function shuffle(a) {
 }
 
 function cardContents(n, s) {
-    return '<p>' + displays['n' + n] + '</p><hr/><h2>' + s.toUpperCase() + '</h2>';
+    return '<p>' + displays['n' + n] + '</p>' + icons[s] + '<hr/>' + getAllIcons(n, s);
 }
 
 window.onhashchange = function() {
