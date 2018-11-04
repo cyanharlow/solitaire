@@ -98,18 +98,40 @@ body {
     box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.5);
     transition: margin-top 0.5s;
 }
-.stack .cd:first-child {
-    margin-top: -60px;
-}
+
 .stack .cd.f {
     margin-top: -60px;
 }
+.stack.len8 .cd.f {
+    margin-top: -65px;
+}
+.stack.len9 .cd.f {
+    margin-top: -67px;
+}
+.stack.len10 .cd.f,
+.stack.len11 .cd.f,
+.stack.len12 .cd.f,
+.stack.len13 .cd.f,
+.stack.len14 .cd.f,
+.stack.len15 .cd.f,
+.stack.len16 .cd.f {
+    margin-top: -70px;
+}
+.cd.f+.cd.a {
+    margin-top: -64px;
+}
+.stack .cd.f:first-child,
+.stack .cd.a:first-child {
+    margin-top: -60px
+}
 .refuse-pile {
-    width: 144px;
-    padding: 50px 0 0 60px;
+    width: 185px;
+    padding-top: 50px;
+    padding-right: 0;
+    padding-bottom: 0;
 }
 .refuse-pile .cd {
-    float: left;
+    float: right;
     margin-top: -50px;
     margin-right: 0;
     margin-left: 5px;
@@ -117,8 +139,82 @@ body {
     transition: margin-left 0.5s;
 }
 .refuse-pile .cd.f {
-    margin-left: -54px;
+    float: left;
 }
+
+.refuse-pile.len24 .cd.f {
+    margin-left: -53.2px;
+}
+.refuse-pile.len23 .cd.f {
+    margin-left: -53.1px;
+}
+.refuse-pile.len22 .cd.f {
+    margin-left: -53px;
+}
+.refuse-pile.len21 .cd.f {
+    margin-left: -52.9px;
+}
+.refuse-pile.len20 .cd.f {
+    margin-left: -52.7px;
+}
+.refuse-pile.len19 .cd.f {
+    margin-left: -52.5px;
+}
+.refuse-pile.len18 .cd.f {
+    margin-left: -52.4px;
+}
+.refuse-pile.len17 .cd.f {
+    margin-left: -52px;
+}
+.refuse-pile.len16 .cd.f {
+    margin-left: -51.7px;
+}
+.refuse-pile.len15 .cd.f {
+    margin-left: -51.5px;
+}
+.refuse-pile.len14 .cd.f {
+    margin-left: -51px;
+}
+.refuse-pile.len13 .cd.f {
+    margin-left: -50.7px;
+}
+.refuse-pile.len12 .cd.f {
+    margin-left: -50px;
+}
+.refuse-pile.len11 .cd.f {
+    margin-left: -49.7px;
+}
+.refuse-pile.len10 .cd.f {
+    margin-left: -49px;
+}
+.refuse-pile.len9 .cd.f {
+    margin-left: -48px;
+}
+.refuse-pile.len8 .cd.f {
+    margin-left: -46px;
+}
+.refuse-pile.len7 .cd.f {
+    margin-left: -44px;
+}
+.refuse-pile.len6 .cd.f {
+    margin-left: -41px;
+}
+.refuse-pile.len5 .cd.f {
+    margin-left: -37px;
+}
+.refuse-pile.len4 .cd.f {
+    margin-left: -28px;
+}
+.refuse-pile.len3 .cd.f {
+    margin-left: 4px;
+}
+.refuse-pile.len2 .cd.f {
+    margin-left: 4px;
+}
+.refuse-pile .cd.f:first-child {
+    margin-left: 0;
+}
+
 
 .closet {
     float: right;

@@ -316,7 +316,7 @@ function renderBoard() {
         upperArea.appendChild(closet);
     }
     var refuse = document.createElement('div');
-    refuse.className = 'refuse-pile clear';
+    refuse.className = 'refuse-pile clear len' + currentGame.refuse.length;
     refuse.id = 'refuse';
     for (var r = 0; r < currentGame.refuse.length; r++) {
         if (currentGame.refuse[r].folded) {
@@ -335,7 +335,7 @@ function renderBoard() {
         var childStackCards = currentGame.stacks[st];
 
         stack.id = 'stack' + sn;
-        stack.className = 'stack' + (childStackCards.length ? '' : ' a');
+        stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a');
         for (var f = 0; f < childStackCards.length; f++) {
             if (childStackCards[f].folded) {
                 isFinished = false;
