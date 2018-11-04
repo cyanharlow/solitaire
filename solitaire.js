@@ -55,8 +55,8 @@ function cardContents(n, s) {
 
 window.onhashchange = function(e) {
     if (e.oldURL.indexOf('step1') > -1) {
-        e.preventDefault();
         alert('You have reached the beginning!');
+        window.history.forward();
 
     } else {
         currentGame = window.history.state;
