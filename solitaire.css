@@ -18,6 +18,7 @@ body {
 
 .numd {
     text-align: center;
+    opacity: 0.4;
 }
 .numd.len10 .icon {
     width: 6px;
@@ -45,9 +46,9 @@ body {
     margin: 7px 2px 1px;
 }
 .numd.len5 .icon {
-    width: 10px;
-    height: 10px;
-    margin: 2px;
+    width: 8px;
+    height: 8px;
+    margin: 7px 2px 1px;
 }
 .numd.len4 .icon {
     width: 10px;
@@ -82,12 +83,12 @@ body {
 
 .icon.heart span,
 .icon.diamond span {
-    background: #800000;
+    background: #a90e0e;
 }
 
 .icon.spade span,
 .icon.club span {
-    background: #333333;
+    background: #424242;
 }
 
 .icon.diamond {
