@@ -39,7 +39,7 @@ var lastLocation = {};
 var movingCard = false;
 var activeCards = [];
 
-var game = {};
+var currentGame = {};
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -53,8 +53,17 @@ function cardContents(n, s) {
     return '<p>' + displays['n' + n] + '</p>' + icons[s] + '<hr/>' + getAllIcons(n, s);
 }
 
-window.onhashchange = function() {
-    renderBoard();
+window.onhashchange = function(e) {
+    if (e.oldURL.indexOf('step1') > -1) {
+        e.preventDefault();
+        alert('You have reached the beginning!');
+
+    } else {
+        currentGame = window.history.state;
+
+        renderBoard();
+
+    }
 };
 
 document.addEventListener('mousedown', function(e) {
@@ -103,7 +112,6 @@ function renderCard(data) {
     return newCard;
 }
 
-
 function startDrag(e) {
     activeCards = [];
     if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
@@ -117,16 +125,20 @@ function startDrag(e) {
         movingCard = true;
     } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
         if (e.target.nextElementSibling) {
-            var thisLast = game.refuse[game.refuse.length - 1];
+            var thisLast = currentGame.refuse[currentGame.refuse.length - 1];
             thisLast.folded = true;
-            game.refuse.pop();
-            game.refuse.unshift(thisLast);
+            currentGame.refuse.pop();
+            currentGame.refuse.unshift(thisLast);
         }
-        game.refuse[game.refuse.length - 1].folded = false;
+        currentGame.refuse[currentGame.refuse.length - 1].folded = false;
         movingCard = false;
+        currentGame.steps = currentGame.steps + 1;
+        window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+
         e.target.onmouseup = true;
     }
 }
+
 function moveDrag(e, lastPosX, lastPosY) {
     if (movingCard && activeCards.length) {
         var left = lastPosX - 30;
@@ -169,7 +181,7 @@ function stopDrag(e, lastPosX, lastPosY) {
             if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
                 if (isStack) {
                     if (movingNum === 13) {
-                        accepterNode = game.stacks[accepter.id];
+                        accepterNode = currentGame.stacks[accepter.id];
 
                         successfulMove = true;
                         break;
@@ -177,7 +189,7 @@ function stopDrag(e, lastPosX, lastPosY) {
                 } else if (isCloset) {
                     var accepterSuit = accepter.getAttribute('data-suit');
                     if (accepterSuit === movingSuit && movingNum === 1 && activeCards.length === 1) {
-                        accepterNode = game.closets[accepter.id];
+                        accepterNode = currentGame.closets[accepter.id];
                         successfulMove = true;
                         break;
                     }
@@ -185,7 +197,7 @@ function stopDrag(e, lastPosX, lastPosY) {
                     var accepterSuit = accepter.data.s;
                     var accepterNum = accepter.data.n;
                     if (accepterSuit === movingSuit && accepterNum + 1 === movingNum && activeCards.length === 1) {
-                        accepterNode = game.closets[accepter.parentNode.id];
+                        accepterNode = currentGame.closets[accepter.parentNode.id];
                         successfulMove = true;
                         break;
                     }
@@ -193,7 +205,7 @@ function stopDrag(e, lastPosX, lastPosY) {
                     var accepterNum = accepter.data.n;
                     var accepterColor = accepter.data.colr;
                     if (accepterColor !== movingColor && accepterNum - 1 === movingNum) {
-                        var accepterNode = game.stacks[accepter.parentNode.id];
+                        var accepterNode = currentGame.stacks[accepter.parentNode.id];
                         var giverNode = lastLocation.id;
                         successfulMove = true;
                         break;
@@ -204,11 +216,11 @@ function stopDrag(e, lastPosX, lastPosY) {
         }
 
         if (successfulMove) {
-            var oldStack = game.stacks[giverNode];
+            var oldStack = currentGame.stacks[giverNode];
             if (giverNode === 'refuse') {
-                oldStack = game['refuse'];
+                oldStack = currentGame['refuse'];
             } else if (giverNode.indexOf('stack') === -1) {
-                oldStack = game.closets[giverNode];
+                oldStack = currentGame.closets[giverNode];
             }
 
             while (activeCards.length) {
@@ -226,21 +238,22 @@ function stopDrag(e, lastPosX, lastPosY) {
                 }
                 oldStack[oldStack.length - 1].folded = false;
             }
+            currentGame.steps = currentGame.steps + 1;
+            window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+
         }
-        // renderBoard();
     }
     movingCard = false;
     activeCards = [];
-    game.steps = game.steps + 1;
-    window.history.pushState(game, null, '#step' + game.steps);
+
     renderBoard();
 
 }
 
 function startNewGame() {
     cards = [];
-    game = {
-        steps: 0,
+    var game = {
+        steps: 1,
         stacks: {
             stack1: [],
             stack2: [],
@@ -301,15 +314,15 @@ function startNewGame() {
             game.stacks['stack' + maxStack].push(sortoObject)
         }
     }
-    window.history.pushState(game, null, '#step0');
-    renderBoard();
 
+    currentGame = game;
+    window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+
+    renderBoard();
 }
 
 function renderBoard() {
-
     var isFinished = true;
-    var currentGame = history.state;
     document.body.innerHTML = '';
     var board = document.createElement('div');
     var upperArea = document.createElement('div');
