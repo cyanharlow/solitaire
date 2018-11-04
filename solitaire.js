@@ -374,9 +374,10 @@ function renderBoard() {
     document.body.appendChild(board);
 
     if (isFinished) {
-        alert('Yay you finished!');
-
-        startNewGame(true);
+        setTimeout(function() {
+            alert('Yay you finished!');
+            startNewGame(true);
+        }, 1000);
     }
 }
 startNewGame();
