@@ -9,6 +9,29 @@ body {
     padding: 50px 15px;
     width: 500px;
     margin: 0 auto;
+    text-align: center;
+    color: #999999;
+}
+h1 {
+    padding: 100px 0 0;
+}
+button {
+    border: 0;
+    background-color: #cc0000;
+    color: #000000;
+    padding: 10px 20px;
+    font-weight: bold;
+    font-family: 'Century Gothic', sans-serif;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 0 auto 20px;
+}
+button.resumer {
+    background-color: #999999;
+}
+button:hover {
+    background-color: red;
 }
 
 .upper-area {
@@ -378,6 +401,7 @@ body {
 
 .closet {
     float: right;
+    text-align: left;
     background-color: #4d4d4d;
     border-radius: 2px;
     width: 57px;
