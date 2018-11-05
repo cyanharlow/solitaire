@@ -3,22 +3,22 @@ html {
     padding: 0;
     overflow: hidden;
     font-family: 'Century Gothic', sans-serif;
-    background-image: linear-gradient(to right, #2b2b2b, #373737);
+    background-image: linear-gradient(to right, #707070, #858585);
 }
 body {
     padding: 50px 15px;
     width: 500px;
     margin: 0 auto;
     text-align: center;
-    color: #999999;
+    color: #333333;
 }
 h1 {
     padding: 100px 0 0;
 }
 button {
     border: 0;
-    background-color: #cc0000;
-    color: #000000;
+    background-color: #9c1c1c;
+    color: #cccccc;
     padding: 10px 20px;
     font-weight: bold;
     font-family: 'Century Gothic', sans-serif;
@@ -28,10 +28,10 @@ button {
     margin: 0 auto 20px;
 }
 button.resumer {
-    background-color: #999999;
+    background-color: #333333;
 }
 button:hover {
-    background-color: red;
+    background-color: #cc0000;
 }
 
 .upper-area {
@@ -102,16 +102,6 @@ button:hover {
 }
 .icon span {
     display: block;
-}
-
-.icon.heart span,
-.icon.diamond span {
-    background: #a90e0e;
-}
-
-.icon.spade span,
-.icon.club span {
-    background: #424242;
 }
 
 .icon.diamond {
@@ -223,14 +213,23 @@ button:hover {
     linear-gradient(to bottom, #2d2c2c, #3b3b3b);
 }
 
+.icon.spade span,
+.icon.club span {
+    background: #999999;
+}
 .cd.s, .cd.c {
-    color: #525252;
+    color: #999999;
     background-color: #181818;
     background-image: linear-gradient(to bottom, #111111, #181818);
     border-color: #252525;
 }
+
+.icon.heart span,
+.icon.diamond span {
+    background: #ee5555;
+}
 .cd.h, .cd.d {
-    color: #c31515;
+    color: #ee5555;
     background-color: #640000;
     background-image: linear-gradient(to bottom, #580000, #640000);
     border-color: #740808;

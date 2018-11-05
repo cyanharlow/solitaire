@@ -23,6 +23,28 @@
         d: '<div class="icon diamond"><span></span></div>'
     };
 
+    var lastLocation = {};
+    var movingCard = false;
+    var activeCards = [];
+
+    var currentGame = {};
+
+    function historyPush() {
+        window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+        document.cookie = 'currentGame=' + JSON.stringify(currentGame);
+    }
+
+    function getCookie(cookie) {
+        var cookies = document.cookie.split('; ');
+        for (var co = 0; co < cookies.length; co++) {
+            var ident = cookie + '=';
+            if (cookies[co].indexOf(ident) === 0) {
+                return cookies[co].replace(ident, '');
+            }
+        }
+        return null;
+    }
+
     function getAllIcons(n, s) {
         if (n < 11) {
             var htmls = '<div class="numd len' + n + '">';
@@ -35,12 +57,6 @@
         }
         return '<h2>' + displays['n' + n] + '</h2>';
     }
-
-    var lastLocation = {};
-    var movingCard = false;
-    var activeCards = [];
-
-    var currentGame = window.history.state ? window.history.state : {};
 
     function shuffle(a) {
         for (let i = a.length - 1; i > 0; i--) {
@@ -58,7 +74,7 @@
         if (window.history.state) {
             currentGame = window.history.state;
             renderBoard();
-            if (e.oldURL.indexOf('step2') > -1) {
+            if (e.newURL.indexOf('step1') > -1 && e.oldURL.indexOf('step2') > -1) {
                 alert('You have reached the beginning of this game!');
             }
         }
@@ -140,7 +156,7 @@
                 grabberCard = grabberCard.nextElementSibling;
             }
             movingCard = true;
-        } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1 ) {
+        } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1) {
             if (e.target.nextElementSibling) {
                 var thisLast = currentGame.refuse[currentGame.refuse.length - 1];
                 thisLast.folded = true;
@@ -150,8 +166,8 @@
             currentGame.refuse[currentGame.refuse.length - 1].folded = false;
             movingCard = false;
             currentGame.steps = currentGame.steps + 1;
-            window.history.pushState(currentGame, null, '#step' + currentGame.steps);
 
+            historyPush();
             e.target.onmouseup = true;
         }
     }
@@ -193,7 +209,7 @@
                 var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
                 var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 0;
                 var isStackCard = accepter.parentNode.className.indexOf('stack') > -1;
-                var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1 ;
+                var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1;
 
                 if (lastPosX >= aX0 && lastPosX <= aX1 && lastPosY >= aY0 && lastPosY <= aY1) {
                     if (isStack) {
@@ -256,7 +272,7 @@
                     oldStack[oldStack.length - 1].folded = false;
                 }
                 currentGame.steps = currentGame.steps + 1;
-                window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+                historyPush();
 
             }
         }
@@ -331,8 +347,7 @@
         }
 
         currentGame = game;
-        window.history.pushState(currentGame, null, '#step' + currentGame.steps);
-
+        historyPush();
         renderBoard();
     }
 
@@ -396,7 +411,8 @@
         }
     }
 
-    if (window.history.state !== null) {
+    if (getCookie('currentGame') !== null) {
+        currentGame = JSON.parse(getCookie('currentGame'));
         var resumeButton = document.createElement('button');
         resumeButton.innerHTML = 'Resume your old game';
         resumeButton.className = 'resumer';
