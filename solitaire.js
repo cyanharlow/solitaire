@@ -64,25 +64,25 @@
         }
     };
 
-    document.addEventListener('touchstart', function(e) {
-        //e.preventDefault();
+    window.addEventListener('touchstart', function(e) {
+        e.preventDefault();
         startDrag(e, false);
     });
-    document.addEventListener('touchmove', function(e) {
-        //e.preventDefault();
+    window.addEventListener('touchmove', function(e) {
+        e.preventDefault();
         var lastPosX = e.changedTouches[0].clientX
         var lastPosY = e.changedTouches[0].clientY;
         moveDrag(e, lastPosX, lastPosY);
     });
-    document.addEventListener('touchend', function(e) {
-        //e.preventDefault();
+    window.addEventListener('touchend', function(e) {
+        e.preventDefault();
         var lastPosX = e.changedTouches[0].clientX
         var lastPosY = e.changedTouches[0].clientY;
         stopDrag(e, lastPosX, lastPosY);
     });
 
     document.addEventListener('mousedown', function(e) {
-
+        e.preventDefault()
         startDrag(e);
     });
 
@@ -100,15 +100,9 @@
         stopDrag(e, lastPosX, lastPosY);
     });
 
-    document.addEventListener('click', function(e) {
-        if (e.target.id === 'startnew') {
-            startNewGame();
-            return false;
-        } else if (e.target.id === 'resume-game') {
-            renderBoard();
-            return false;
-        }
-    });
+    // document.addEventListener('click', function(e) {
+    //
+    // });
 
     function renderCard(data) {
         var newCard = document.createElement('div');
@@ -127,6 +121,15 @@
     }
 
     function startDrag(e) {
+        //e.preventDefault();
+        if (e.target.id === 'startnew') {
+            startNewGame();
+            return false;
+        } else if (e.target.id === 'resume-game') {
+            renderBoard();
+            return false;
+        }
+
         activeCards = [];
         if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
             lastLocation = e.target.parentNode;
