@@ -362,6 +362,7 @@
             var cardsInCloset = currentGame.closets[gc];
             closet.id = gc;
             closet.className = 'closet closet' + gc + (cardsInCloset.length ? '' : ' a');
+            closet.innerHTML = icons[gc];
             closet.setAttribute('data-suit', gc);
             for (var c = 0; c < cardsInCloset.length; c++) {
                 if (cardsInCloset[c].folded) {
