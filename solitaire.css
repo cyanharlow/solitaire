@@ -408,6 +408,12 @@ button:hover {
     padding: 81px 4px 5px;
     margin: 0 5px 0 0;
 }
+.closeth, .closetd {
+    background-color: #9a6971;
+}
+.closets, .closetc {
+    background-color: #797878;
+}
 .closet .cd {
     margin: -76px 0 0;
 }
