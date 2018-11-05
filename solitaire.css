@@ -3,7 +3,7 @@ html {
     padding: 0;
     overflow: hidden;
     font-family: 'Century Gothic', sans-serif;
-    background-image: linear-gradient(to right, #707070, #858585);
+    background-image: linear-gradient(to right, #4e4141, #7f6767);
 }
 body {
     padding: 50px 15px;
@@ -206,11 +206,11 @@ button:hover {
 }
 
 .cd.f {
-    background-color: #434343;
-    border-color: #505050;
-    background-image: repeating-linear-gradient(55deg, transparent, transparent 18px, #9c9c9c 19px, transparent 20px),
-    repeating-linear-gradient(-55deg, transparent, transparent 18px, #565656 19px, transparent 20px),
-    linear-gradient(to bottom, #2d2c2c, #3b3b3b);
+    background-color: #412020;
+    border-color: #473b3b;
+    background-image: repeating-linear-gradient(55deg, transparent, transparent 18px, #8e7676 19px, transparent 20px),
+    repeating-linear-gradient(-55deg, transparent, transparent 18px, #524646 19px, transparent 20px),
+    linear-gradient(to bottom, #271e1e, #403434);
 }
 
 .icon.spade span,
