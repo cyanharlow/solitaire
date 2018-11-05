@@ -137,12 +137,19 @@
     }
 
     function startDrag(e) {
-        //e.preventDefault();
         if (e.target.id === 'startnew') {
             startNewGame();
             return false;
+        } else if (e.target.id === 'new-game') {
+            if (window.confirm("Abandon old game and start a new one?")) {
+                startNewGame();
+            }
+            return false;
         } else if (e.target.id === 'resume-game') {
             renderBoard();
+            return false;
+        } else if (e.target.id === 'back-button') {
+            window.history.back();
             return false;
         }
 
@@ -402,6 +409,11 @@
             stacks.appendChild(stack);
         }
         board.appendChild(stacks);
+
+        var bottomButtons = document.createElement('div');
+        bottomButtons.className = 'bottom-buttons clear';
+        bottomButtons.innerHTML = '<button id="back-button" class="back">&larr;</button><button id="new-game" class="new">&#xff0b;</button>';
+        board.appendChild(bottomButtons);
         document.body.appendChild(board);
 
         if (isFinished) {
@@ -415,7 +427,7 @@
     if (getCookie('currentGame') !== null) {
         currentGame = JSON.parse(getCookie('currentGame'));
         var resumeButton = document.createElement('button');
-        resumeButton.innerHTML = 'Resume your old game';
+        resumeButton.innerHTML = 'Resume previous';
         resumeButton.className = 'resumer';
         resumeButton.id = 'resume-game';
         document.getElementById('start-container').appendChild(resumeButton);

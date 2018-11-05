@@ -2,30 +2,52 @@ html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    font-family: 'Century Gothic', sans-serif;
-    background-image: linear-gradient(to top, #4e4141, #7f6767);
+    font-family: 'Raleway', 'Century Gothic', sans-serif;
+    background-image: linear-gradient(to top, #4e4141, #685454);
 }
 body {
     padding: 20px 10px;
     width: 500px;
     margin: 0 auto;
     text-align: center;
-    color: #333333;
+    color:#ccbdbd;
 }
 h1 {
-    padding: 100px 0 0;
+    padding: 100px 0 50px;
+    font-weight: 200;
 }
 button {
     border: 0;
-    background-color: #9c1c1c;
-    color: #cccccc;
     padding: 10px 20px;
-    font-weight: bold;
-    font-family: 'Century Gothic', sans-serif;
+    font-family: 'Raleway', 'Century Gothic', sans-serif;
     border-radius: 8px;
     font-size: 18px;
     cursor: pointer;
+}
+.start-container button {
+    background-color: #9c1c1c;
+    color: #cccccc;
+    min-width: 200px;
     margin: 0 auto 20px;
+}
+.bottom-buttons {
+    position: fixed;
+    background-color: #685454;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+}
+.bottom-buttons button {
+    background-color: #4e4141;
+    color:#ccbdbd;
+    font-weight: bold;
+}
+.bottom-buttons .back {
+    float: left;
+}
+.bottom-buttons .new {
+    float: right;
 }
 button.resumer {
     background-color: #333333;
