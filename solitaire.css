@@ -417,13 +417,13 @@ button:hover {
 .closet .icon {
     pointer-events: none;
     text-align: center;
-    height: 56px;
+    height: 36px;
     position: absolute;
-    width: 58px;
+    width: 35px;
     line-height: 40px;
-    margin: -58px 0 0;
+    margin: -58px 0 0 12px;
     font-size: 40px;
-    color: #746262;
+    opacity: 0.5;
 }
 .clear:after {
     content: "";
