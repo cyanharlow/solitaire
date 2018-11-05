@@ -207,7 +207,7 @@
                 var aY1 = accepter.offsetTop + accepter.offsetHeight;
 
                 var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
-                var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 0;
+                var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 1;
                 var isStackCard = accepter.parentNode.className.indexOf('stack') > -1;
                 var isClosetCard = accepter.parentNode.className.indexOf('closet') > -1;
 
