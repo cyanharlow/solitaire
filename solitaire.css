@@ -3,7 +3,7 @@ html {
     padding: 0;
     overflow: hidden;
     font-family: 'Century Gothic', sans-serif;
-    background-image: linear-gradient(to right, #4e4141, #7f6767);
+    background-image: linear-gradient(to top, #4e4141, #7f6767);
 }
 body {
     padding: 50px 15px;
@@ -401,7 +401,7 @@ button:hover {
 .closet {
     float: right;
     text-align: left;
-    background-color: #4d4d4d;
+    background-color: #4b3e3e;
     border-radius: 2px;
     width: 57px;
     height: 0px;
@@ -423,7 +423,7 @@ button:hover {
     line-height: 40px;
     margin: -58px 0 0;
     font-size: 40px;
-    color: #444444;
+    color: #423838;
 }
 .closets:before {
     content: "S";
