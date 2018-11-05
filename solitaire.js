@@ -64,7 +64,43 @@
         }
     };
 
+    document.addEventListener('touchstart', function(e) {
+        //e.preventDefault();
+        startDrag(e, false);
+    });
+    document.addEventListener('touchmove', function(e) {
+        //e.preventDefault();
+        var lastPosX = e.changedTouches[0].clientX
+        var lastPosY = e.changedTouches[0].clientY;
+        moveDrag(e, lastPosX, lastPosY);
+    });
+    document.addEventListener('touchend', function(e) {
+        //e.preventDefault();
+        var lastPosX = e.changedTouches[0].clientX
+        var lastPosY = e.changedTouches[0].clientY;
+        stopDrag(e, lastPosX, lastPosY);
+    });
+
     document.addEventListener('mousedown', function(e) {
+
+        startDrag(e);
+    });
+
+
+    document.addEventListener('mousemove', function(e) {
+        var lastPosX = e.pageX
+        var lastPosY = e.pageY;
+        moveDrag(e, lastPosX, lastPosY);
+    });
+
+
+    document.addEventListener('mouseup', function(e) {
+        var lastPosX = e.pageX
+        var lastPosY = e.pageY;
+        stopDrag(e, lastPosX, lastPosY);
+    });
+
+    document.addEventListener('click', function(e) {
         if (e.target.id === 'startnew') {
             startNewGame();
             return false;
@@ -72,34 +108,7 @@
             renderBoard();
             return false;
         }
-        startDrag(e);
     });
-    //
-    // document.addEventListener('touchstart', function(e) {
-    //     startDrag(e, false);
-    // });
-
-    document.addEventListener('mousemove', function(e) {
-        var lastPosX = e.pageX
-        var lastPosY = e.pageY;
-        moveDrag(e, lastPosX, lastPosY);
-    });
-    document.addEventListener('touchmove', function(e) {
-        var lastPosX = e.changedTouches[0].clientX
-        var lastPosY = e.changedTouches[0].clientY;
-        moveDrag(e, lastPosX, lastPosY);
-    });
-
-    document.addEventListener('mouseup', function(e) {
-        var lastPosX = e.pageX
-        var lastPosY = e.pageY;
-        stopDrag(e, lastPosX, lastPosY);
-    });
-    // document.addEventListener('touchend', function(e) {
-    //     var lastPosX = e.changedTouches[0].clientX
-    //     var lastPosY = e.changedTouches[0].clientY;
-    //     stopDrag(e, lastPosX, lastPosY);
-    // });
 
     function renderCard(data) {
         var newCard = document.createElement('div');
