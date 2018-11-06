@@ -62,7 +62,7 @@
         var needLen = needle.length;
         var hayLen = haystack.length;
         if (needLen < hayLen) {
-            var lopped = hayLen.slice(-needLen);
+            var lopped = haystack.slice(-needLen);
             if (needle === lopped) {
                 return true;
             }
@@ -161,6 +161,7 @@
             renderBoard();
             return false;
         } else if (e.target.id === 'back-button') {
+            e.preventDefault();
             window.history.back();
             return false;
         }
