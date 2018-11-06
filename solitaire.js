@@ -58,6 +58,18 @@
         return '<h2>' + displays['n' + n] + '</h2>';
     }
 
+    function strEndsWith(needle, haystack) {
+        var needLen = needle.length;
+        var hayLen = haystack.length;
+        if (needLen < hayLen) {
+            var lopped = hayLen.slice(-needLen);
+            if (needle === lopped) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function shuffle(a) {
         for (let i = a.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -74,7 +86,7 @@
         if (window.history.state) {
             currentGame = window.history.state;
             renderBoard();
-            if (e.newURL.indexOf('step1') > -1 && e.oldURL.indexOf('step2') > -1) {
+            if (strEndsWith('step1', e.newURL) > -1 && strEndsWith('step2', e.oldURL) > -1) {
                 alert('You have reached the beginning of this game!');
             }
         }
