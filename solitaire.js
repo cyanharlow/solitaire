@@ -29,8 +29,10 @@
     var currentGame = {};
 
     function historyPush() {
+        currentGame.steps = currentGame.steps + 1;
         window.history.pushState(currentGame, null, '#step' + currentGame.steps);
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
+        renderBoard();
     }
 
     function getCookie(cookie) {
@@ -175,6 +177,7 @@
                 grabberCard = grabberCard.nextElementSibling;
             }
         } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1) {
+            e.preventDefault();
             if (e.target.nextElementSibling) {
                 var thisLast = currentGame.refuse[currentGame.refuse.length - 1];
                 thisLast.folded = true;
@@ -183,10 +186,7 @@
             }
             currentGame.refuse[currentGame.refuse.length - 1].folded = false;
             activeCards = [];
-            currentGame.steps = currentGame.steps + 1;
-
             historyPush();
-            renderBoard();
         }
     }
 
@@ -288,9 +288,7 @@
                     }
                     oldStack[oldStack.length - 1].folded = false;
                 }
-                currentGame.steps = currentGame.steps + 1;
                 historyPush();
-                renderBoard();
             } else {
                 activeCards = [];
                 renderBoard();
@@ -301,7 +299,7 @@
     function startNewGame() {
         cards = [];
         var game = {
-            steps: 1,
+            steps: 0,
             stacks: {
                 stack1: [],
                 stack2: [],
@@ -365,7 +363,6 @@
 
         currentGame = game;
         historyPush();
-        renderBoard();
     }
 
     function renderBoard() {
