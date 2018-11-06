@@ -24,7 +24,6 @@
     };
 
     var lastLocation = {};
-    var movingCard = false;
     var activeCards = [];
 
     var currentGame = {};
@@ -86,7 +85,7 @@
         if (window.history.state) {
             currentGame = window.history.state;
             renderBoard();
-            if (strEndsWith('step1', e.newURL) > -1 && strEndsWith('step2', e.oldURL) > -1) {
+            if (strEndsWith('step1', e.newURL) && strEndsWith('step2', e.oldURL)) {
                 alert('You have reached the beginning of this game!');
             }
         }
@@ -175,7 +174,6 @@
                 activeCards.push(grabberCard);
                 grabberCard = grabberCard.nextElementSibling;
             }
-            movingCard = true;
         } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1) {
             if (e.target.nextElementSibling) {
                 var thisLast = currentGame.refuse[currentGame.refuse.length - 1];
@@ -184,16 +182,16 @@
                 currentGame.refuse.unshift(thisLast);
             }
             currentGame.refuse[currentGame.refuse.length - 1].folded = false;
-            movingCard = false;
+            activeCards = [];
             currentGame.steps = currentGame.steps + 1;
 
             historyPush();
-            e.target.onmouseup = true;
+            renderBoard();
         }
     }
 
     function moveDrag(e, lastPosX, lastPosY) {
-        if (movingCard && activeCards.length) {
+        if (activeCards.length > 0) {
             var left = lastPosX - 30;
             var top = lastPosY + 15;
             var zIndex = 999999;
@@ -210,7 +208,7 @@
         var giverNode = lastLocation.id;
 
         var successfulMove = false;
-        if (movingCard && activeCards.length) {
+        if (activeCards.length > 0) {
             var movingSuit = activeCards[0].data.s;
             var movingNum = activeCards[0].data.n;
             var movingColor = activeCards[0].data.colr;
@@ -235,7 +233,6 @@
                     if (isStack) {
                         if (movingNum === 13) {
                             accepterNode = currentGame.stacks[accepter.id];
-
                             successfulMove = true;
                             break;
                         }
@@ -276,7 +273,7 @@
                     oldStack = currentGame.closets[giverNode];
                 }
 
-                while (activeCards.length) {
+                while (activeCards.length > 0) {
                     if (activeCards.length === 1) {
                         activeCards[0].data.accepting = true;
                     }
@@ -293,12 +290,12 @@
                 }
                 currentGame.steps = currentGame.steps + 1;
                 historyPush();
-
+                renderBoard();
+            } else {
+                activeCards = [];
+                renderBoard();
             }
         }
-        movingCard = false;
-        activeCards = [];
-        renderBoard();
     }
 
     function startNewGame() {
