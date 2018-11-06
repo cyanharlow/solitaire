@@ -442,7 +442,7 @@ button:hover {
 .closet .cd:last-of-type {
     box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
 }
-.closet .icon {
+.closet > .icon {
     pointer-events: none;
     text-align: center;
     height: 36px;

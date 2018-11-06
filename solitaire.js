@@ -93,63 +93,7 @@
         }
     };
 
-    window.addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        startDrag(e, false);
-    });
-    window.addEventListener('touchmove', function(e) {
-        e.preventDefault();
-        var lastPosX = e.changedTouches[0].clientX
-        var lastPosY = e.changedTouches[0].clientY;
-        moveDrag(e, lastPosX, lastPosY);
-    });
-    window.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        var lastPosX = e.changedTouches[0].clientX
-        var lastPosY = e.changedTouches[0].clientY;
-        stopDrag(e, lastPosX, lastPosY);
-    });
-
-    document.addEventListener('mousedown', function(e) {
-        e.preventDefault()
-        startDrag(e);
-    });
-
-
-    document.addEventListener('mousemove', function(e) {
-        var lastPosX = e.pageX
-        var lastPosY = e.pageY;
-        moveDrag(e, lastPosX, lastPosY);
-    });
-
-
-    document.addEventListener('mouseup', function(e) {
-        var lastPosX = e.pageX
-        var lastPosY = e.pageY;
-        stopDrag(e, lastPosX, lastPosY);
-    });
-
-    // document.addEventListener('click', function(e) {
-    //
-    // });
-
-    function renderCard(data) {
-        var newCard = document.createElement('div');
-        newCard.data = data;
-        newCard.className = 'cd ';
-        newCard.onclick = function() {
-            return false;
-        };
-        if (data.folded) {
-            newCard.className = newCard.className + 'f';
-        } else {
-            newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '');
-            newCard.innerHTML = cardContents(data.n, data.s);
-        }
-        return newCard;
-    }
-
-    function startDrag(e) {
+    document.addEventListener('click', function(e) {
         if (e.target.id === 'startnew') {
             startNewGame();
             return false;
@@ -166,7 +110,52 @@
             window.history.back();
             return false;
         }
+    });
 
+    function renderCard(data) {
+        var newCard = document.createElement('div');
+        newCard.data = data;
+        newCard.className = 'cd ';
+        newCard.ontouchstart = function(e) {
+            e.preventDefault();
+            startDrag(e);
+            return false;
+        };
+        newCard.ontouchmove = function(e) {
+            var lastPosX = e.changedTouches[0].clientX
+            var lastPosY = e.changedTouches[0].clientY;
+            moveDrag(e, lastPosX, lastPosY);
+        };
+        newCard.ontouchend = function(e) {
+            e.preventDefault();
+            var lastPosX = e.changedTouches[0].clientX
+            var lastPosY = e.changedTouches[0].clientY;
+            stopDrag(e, lastPosX, lastPosY);
+            return false;
+        };
+        newCard.onmousedown = function(e) {
+            startDrag(e);
+        };
+        newCard.onmousemove = function(e) {
+            var lastPosX = e.pageX
+            var lastPosY = e.pageY;
+            moveDrag(e, lastPosX, lastPosY);
+        };
+        newCard.onmouseup = function(e) {
+            var lastPosX = e.pageX
+            var lastPosY = e.pageY;
+            stopDrag(e, lastPosX, lastPosY);
+        };
+        if (data.folded) {
+            newCard.className = newCard.className + 'f';
+        } else {
+            newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '');
+            newCard.innerHTML = cardContents(data.n, data.s);
+        }
+        return newCard;
+    }
+
+    function startDrag(e) {
         activeCards = [];
         if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
             lastLocation = e.target.parentNode;
@@ -177,7 +166,6 @@
                 grabberCard = grabberCard.nextElementSibling;
             }
         } else if (e.target.className.indexOf('cd f') > -1 && e.target.parentNode.className.indexOf('refuse') > -1) {
-            e.preventDefault();
             if (e.target.nextElementSibling) {
                 var thisLast = currentGame.refuse[currentGame.refuse.length - 1];
                 thisLast.folded = true;
