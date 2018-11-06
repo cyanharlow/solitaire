@@ -57,7 +57,6 @@ button:hover {
 }
 
 .upper-area {
-    padding-right: 9px;
     padding-bottom: 10px;
 }
 
@@ -132,7 +131,8 @@ button:hover {
 .icon.diamond span {
     width: 70%;
     height: 70%;
-    margin-top: 27%;
+    margin-top: 21%;
+    margin-left: 14%;
     transform: rotate(45deg);
 }
 
@@ -151,10 +151,10 @@ button:hover {
 }
 .icon.heart .c {
     transform: rotate(45deg);
-    width: 57%;
-    height: 57%;
-    margin-left: 23%;
-    margin-top: 33%;
+    width: 52%;
+    height: 52%;
+    margin-left: 24%;
+    margin-top: 38%;
 }
 
 .icon.spade .a,
@@ -229,10 +229,10 @@ button:hover {
 
 .cd.f {
     background-color: #412020;
-    border-color: #473b3b;
+    border-color: #594848;
     background-image: repeating-linear-gradient(55deg, transparent, transparent 18px, #8e7676 19px, transparent 20px),
-    repeating-linear-gradient(-55deg, transparent, transparent 18px, #524646 19px, transparent 20px),
-    linear-gradient(to bottom, #271e1e, #403434);
+    repeating-linear-gradient(-55deg, transparent, transparent 18px, #423636 19px, transparent 20px),
+    linear-gradient(to bottom, #685454, #4c3e3e);
 }
 
 .icon.spade span,
@@ -289,7 +289,7 @@ button:hover {
 }
 
 .stack {
-    width: 14%;
+    width: 14.2%;
     padding-top: 70px;
     float: left;
 }
@@ -297,9 +297,8 @@ button:hover {
 .stack .cd {
     margin-bottom: 0;
     margin-left: 5px;
-    margin-right: 5px;
     margin-top: -50px;
-    box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.5);
+    box-shadow: 0px -3px 4px 1px rgba(0,0,0,0.25);
     transition: margin-top 0.5s;
 }
 
@@ -344,6 +343,7 @@ button:hover {
 }
 .refuse-pile .cd.f {
     float: left;
+    box-shadow: -3px -2px 4px -2px rgba(0,0,0,0.5);
 }
 
 .refuse-pile.len24 .cd.f {
@@ -423,19 +423,19 @@ button:hover {
 .closet {
     float: right;
     text-align: left;
-    background-color: #866f6f;
+    background-color: #524444;
     border-radius: 2px;
     width: 57px;
     height: 0px;
     padding: 81px 4px 5px;
     margin: 0 5px 0 0;
 }
-.closeth, .closetd {
-    background-color: #9a6971;
+/* .closeth, .closetd {
+    background-color: #740808;
 }
 .closets, .closetc {
-    background-color: #797878;
-}
+    background-color: #252525;
+} */
 .closet .cd {
     margin: -76px 0 0;
 }

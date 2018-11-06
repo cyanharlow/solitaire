@@ -249,7 +249,6 @@
                             break;
                         }
                     }
-
                 }
             }
 
@@ -348,7 +347,6 @@
                 game.stacks['stack' + maxStack].push(sortoObject)
             }
         }
-
         currentGame = game;
         historyPush();
     }
