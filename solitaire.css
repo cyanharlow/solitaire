@@ -389,12 +389,9 @@ button:hover {
     border-radius: 50%;
 }
 
-.stacks {
-    clear: both;
-}
 
 .stack {
-    width: 14.2%;
+    width: 11%;
     padding-top: 70px;
     float: left;
 }
@@ -433,24 +430,94 @@ button:hover {
     margin-top: -60px
 }
 .refuse-pile {
+    width: 11%;
+    padding-top: 135px;
+    padding-right: 0;
+    padding-bottom: 0;
+    float: left;
+}
+.refuse-pile .cd {
+    margin-right: 0;
+    margin-top: -50px;
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
+}
+.refuse-pile .cd.f {
+    float: left;
+    margin-top: -135px;
+    margin-bottom: 62px;
+    box-shadow: -3px -2px 4px -2px rgba(0,0,0,0.5);
+}
+.closets-area {
+    width: 11%;
+    float: right;
+}
+.closet {
+    float: right;
+    text-align: left;
+    border-radius: 2px;
+    width: 57px;
+    height: 0px;
+    padding: 81px 4px 5px;
+    margin: 0 0 5px 0;
+}
+/* .closeth, .closetd {
+    background-color: #740808;
+}
+.closets, .closetc {
+    background-color: #252525;
+} */
+.closet .cd {
+    margin: -76px 0 0;
+}
+.closet .cd:last-of-type {
+    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
+}
+.closet > .icon {
+    pointer-events: none;
+    text-align: center;
+    height: 36px;
+    position: absolute;
+    width: 35px;
+    line-height: 40px;
+    margin: -58px 0 0 12px;
+    font-size: 40px;
+    opacity: 0.5;
+}
+.clear:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+/* phone */
+@media (max-width: 630px) {
+
+    .stacks {
+        clear: both;
+    }
+    .stack {
+        width: 14.2%;
+    }
+    .closets-area {
+        float: none;
+        width: auto;
+    }
+    .closet {
+        margin: 0 5px 0 0;
+    }
+.refuse-pile {
     width: 185px;
     padding-top: 50px;
     padding-right: 0;
     padding-bottom: 0;
 }
+.refuse-pile .cd,
+.refuse-pile .cd.f {
+    margin-top: -50px;
+}
 .refuse-pile .cd {
     float: right;
-    margin-top: -50px;
-    margin-right: 0;
-    margin-left: 5px;
-    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
-    transition: margin-left 0.5s;
 }
-.refuse-pile .cd.f {
-    float: left;
-    box-shadow: -3px -2px 4px -2px rgba(0,0,0,0.5);
-}
-
 .refuse-pile.len24 .cd.f {
     margin-left: -53.2px;
 }
@@ -523,42 +590,4 @@ button:hover {
 .refuse-pile .cd.f:first-child {
     margin-left: 0;
 }
-
-
-.closet {
-    float: right;
-    text-align: left;
-    border-radius: 2px;
-    width: 57px;
-    height: 0px;
-    padding: 81px 4px 5px;
-    margin: 0 5px 0 0;
-}
-/* .closeth, .closetd {
-    background-color: #740808;
-}
-.closets, .closetc {
-    background-color: #252525;
-} */
-.closet .cd {
-    margin: -76px 0 0;
-}
-.closet .cd:last-of-type {
-    box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.5);
-}
-.closet > .icon {
-    pointer-events: none;
-    text-align: center;
-    height: 36px;
-    position: absolute;
-    width: 35px;
-    line-height: 40px;
-    margin: -58px 0 0 12px;
-    font-size: 40px;
-    opacity: 0.5;
-}
-.clear:after {
-    content: "";
-    display: block;
-    clear: both;
 }

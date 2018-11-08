@@ -362,8 +362,8 @@
         document.body.innerHTML = '';
         var board = document.createElement('div');
         board.className = 'board ' + currentGame.color;
-        var upperArea = document.createElement('div');
-        upperArea.className = 'upper-area clear';
+        var closets = document.createElement('div');
+        closets.className = 'closets-area';
         for (var gc in currentGame.closets) {
             var closet = document.createElement('div');
             var cardsInCloset = currentGame.closets[gc];
@@ -377,10 +377,10 @@
                 }
                 closet.appendChild(renderCard(cardsInCloset[c]));
             }
-            upperArea.appendChild(closet);
+            closets.appendChild(closet);
         }
         var refuse = document.createElement('div');
-        refuse.className = 'refuse-pile clear len' + currentGame.refuse.length;
+        refuse.className = 'refuse-pile len' + currentGame.refuse.length;
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
             if (currentGame.refuse[r].folded) {
@@ -388,10 +388,12 @@
             }
             refuse.appendChild(renderCard(currentGame.refuse[r]));
         }
-        upperArea.appendChild(refuse);
-        board.appendChild(upperArea);
+        board.appendChild(refuse);
+        board.appendChild(closets);
         var stacks = document.createElement('div');
-        stacks.className = 'stacks clear';
+        stacks.className = 'stacks';
+        board.appendChild(stacks);
+
         var sn = 0;
         for (var st in currentGame.stacks) {
             sn++;
@@ -406,9 +408,8 @@
                 }
                 stack.appendChild(renderCard(childStackCards[f]));
             }
-            stacks.appendChild(stack);
+            board.appendChild(stack);
         }
-        board.appendChild(stacks);
 
         var bottomButtons = document.createElement('div');
         bottomButtons.className = 'bottom-buttons clear';
@@ -417,7 +418,6 @@
         document.body.appendChild(board);
 
         var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
-
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
 
         if (isFinished) {
