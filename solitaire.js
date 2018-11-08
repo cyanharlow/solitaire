@@ -417,8 +417,13 @@
         board.appendChild(bottomButtons);
         document.body.appendChild(board);
 
+        var screenW = window.outerWidth;
+        var screenH = window.outerHeight;
+
+        var ratio = screenW > screenH ? '690' : '530';
         var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
+        document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
 
         if (isFinished) {
             setTimeout(function() {
