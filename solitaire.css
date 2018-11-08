@@ -1,7 +1,6 @@
 html {
     margin: 0;
     padding: 0;
-    overflow: hidden;
     font-family: 'Raleway', 'Century Gothic', sans-serif;
     background-image: linear-gradient(to top, #4e4141, #685454);
 }
@@ -15,9 +14,11 @@ body {
     max-width: 800px;
     padding: 20px 10px;
     position: fixed;
+    overflow: auto;
     top: 0;
     left: 0;
     right: 0;
+    bottom: 0;
     height: 100%;
 }
 
@@ -112,6 +113,7 @@ button {
     right: 0;
     padding: 10px;
     text-align: center;
+    z-index: 200000;
 }
 .bottom-buttons .toggle {
     display: inline-block;
@@ -450,6 +452,7 @@ button:hover {
 .closets-area {
     width: 11%;
     float: right;
+    padding-bottom: 100px;
 }
 .closet {
     float: right;
@@ -502,6 +505,7 @@ button:hover {
     .closets-area {
         float: none;
         width: auto;
+        padding-bottom: 0;
     }
     .closet {
         margin: 0 5px 0 0;

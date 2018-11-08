@@ -361,7 +361,7 @@
         var isFinished = true;
         document.body.innerHTML = '';
         var board = document.createElement('div');
-        board.className = 'board ' + currentGame.color;
+        board.className = 'board clear ' + currentGame.color;
         var closets = document.createElement('div');
         closets.className = 'closets-area';
         for (var gc in currentGame.closets) {
