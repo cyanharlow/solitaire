@@ -11,13 +11,13 @@ body {
     color:#ccbdbd;
 }
 .board {
-    max-width: 800px;
-    padding: 20px 10px 100px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     min-height: 100%;
+}
+.board .inner {
+    width: 800px;
+    max-width: 92%;
+    padding: 20px 4% 100px;
+    margin: auto;
 }
 
 /* dark */
@@ -146,6 +146,7 @@ position: relative;
 }
 .bottom-buttons input {
     position: absolute;
+    opacity: 0;
     width: 0;
     height: 0;
 }

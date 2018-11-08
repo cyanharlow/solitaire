@@ -93,6 +93,10 @@
         }
     };
 
+    window.onresize = function() {
+        renderBoard();
+    };
+
     document.addEventListener('click', function(e) {
         if (e.target.id === 'startnew') {
             startNewGame();
@@ -360,8 +364,11 @@
     function renderBoard() {
         var isFinished = true;
         document.body.innerHTML = '';
+        
+        var outerBoard = document.createElement('div');
+        outerBoard.className = 'board clear ' + currentGame.color;
         var board = document.createElement('div');
-        board.className = 'board clear ' + currentGame.color;
+        board.className = 'inner clear';
         var closets = document.createElement('div');
         closets.className = 'closets-area';
         for (var gc in currentGame.closets) {
@@ -415,7 +422,8 @@
         bottomButtons.className = 'bottom-buttons clear';
         bottomButtons.innerHTML = '<button id="back-button" class="back">&larr;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="new-game" class="new">&#xff0b;</button>';
         board.appendChild(bottomButtons);
-        document.body.appendChild(board);
+        outerBoard.appendChild(board);
+        document.body.appendChild(outerBoard);
 
         var screenW = window.outerWidth;
         var screenH = window.outerHeight;
