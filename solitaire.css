@@ -18,13 +18,27 @@ body {
     max-width: 92%;
     padding: 20px 4% 100px;
     margin: auto;
+
 }
 
 @keyframes flipover {
     0% {
+        top: -10px;
         transform: scaleX(0.001);
     }
     100% {
+        top: 0;
+        transform: scaleX(1);
+    }
+}
+
+@keyframes slideright {
+    0% {
+        left: -80px;
+        transform: scaleX(0.001);
+    }
+    100% {
+        left: 0;
         transform: scaleX(1);
     }
 }
@@ -32,7 +46,9 @@ body {
 .flipover {
     animation: flipover 0.5s 1;
 }
-
+.slide {
+    animation: slideright 0.5s 1;
+}
 /* dark */
 .board.dark {
     background-image: linear-gradient(to top, #0f0c0c, #251e1e);

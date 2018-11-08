@@ -170,6 +170,7 @@
 
     function startDrag(e) {
         activeCards = [];
+        itemToAnimate = null;
         if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
             lastLocation = e.target.parentNode;
             activeCards.push(e.target);
@@ -186,8 +187,11 @@
                 currentGame.refuse.unshift(thisLast);
             }
             currentGame.refuse[currentGame.refuse.length - 1].folded = false;
+
+            itemToAnimate = currentGame.refuse[currentGame.refuse.length - 1];
+            itemToAnimate.class = 'slide';
             activeCards = [];
-            historyPush();
+            historyPush(itemToAnimate);
         }
     }
 
@@ -284,12 +288,12 @@
                     activeCards.shift();
                 }
                 if (oldStack.length) {
+                    if (oldStack[oldStack.length - 1].folded) {
+                        itemToAnimate = oldStack[oldStack.length - 1];
+                        itemToAnimate.class = giverNode === 'refuse' ? 'slide' : 'flipover';
+                    }
                     if (giverNode !== 'refuse') {
                         oldStack[oldStack.length - 1].accepting = true;
-                        if (oldStack[oldStack.length - 1].folded) {
-                            itemToAnimate = oldStack[oldStack.length - 1];
-                            itemToAnimate.class = 'flipover';
-                        }
                     }
                     oldStack[oldStack.length - 1].folded = false;
                 }
@@ -402,7 +406,7 @@
             if (currentGame.refuse[r].folded) {
                 isFinished = false;
             }
-            refuse.appendChild(renderCard(currentGame.refuse[r]));
+            refuse.appendChild(renderCard(currentGame.refuse[r], itemToAnimate));
         }
         board.appendChild(refuse);
         board.appendChild(closets);
