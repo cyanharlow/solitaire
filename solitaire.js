@@ -392,7 +392,7 @@
         var refuse = document.createElement('div');
         var priorRefCard = priorGame.refuse[priorGame.refuse.length - 1];
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
-        var shouldAnimate = currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length;
+        var shouldAnimate = currentRefCard && priorRefCard && (currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length);
         refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
