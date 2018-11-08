@@ -392,7 +392,7 @@
         var refuse = document.createElement('div');
         var priorRefCard = priorGame.refuse[priorGame.refuse.length - 1];
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
-        var shouldAnimate = currentRefCard.id !== priorRefCard.id || currentGame.refuse.length !== priorGame.refuse.length;
+        var shouldAnimate = currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length;
         refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
@@ -415,7 +415,7 @@
             var priorStack = priorGame.stacks[st];
 
             var stackShrink = priorStack.length > childStackCards.length;
-            var stackGrow = priorStack.length > childStackCards.length;
+            var stackGrow = priorStack.length < childStackCards.length;
 
             stack.id = 'stack' + sn;
             stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + (stackShrink || stackGrow ? ' contractexpand' : '');
