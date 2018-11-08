@@ -12,14 +12,12 @@ body {
 }
 .board {
     max-width: 800px;
-    padding: 20px 10px;
-    position: fixed;
-    overflow: auto;
+    padding: 20px 10px 100px;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 100%;
+    min-height: 100%;
 }
 
 /* dark */
@@ -89,7 +87,7 @@ border-color: #9c9c9c;
     border-color: #ff6c6c;
 }
 h1 {
-    padding: 100px 0 50px;
+    padding: 50px 0 2px;
     font-weight: 200;
 }
 button {
@@ -452,7 +450,6 @@ button:hover {
 .closets-area {
     width: 11%;
     float: right;
-    padding-bottom: 100px;
 }
 .closet {
     float: right;

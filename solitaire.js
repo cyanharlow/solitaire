@@ -127,17 +127,15 @@
             return false;
         };
         newCard.ontouchmove = function(e) {
-            var lastPosX = e.changedTouches[0].clientX
+            var lastPosX = e.changedTouches[0].clientX;
             var lastPosY = e.changedTouches[0].clientY;
             moveDrag(e, lastPosX, lastPosY);
         };
         newCard.ontouchend = function(e) {
-            console.log(e)
             e.preventDefault();
-            var lastPosX = e.changedTouches[0].clientX
-            var lastPosY = e.changedTouches[0].clientY;
-            var positionY = e.changedTouches[0].screenY;
-            stopDrag(e, lastPosX, lastPosY, positionY);
+            var lastPosX = e.changedTouches[0].pageX;
+            var lastPosY = e.changedTouches[0].pageY;
+            stopDrag(e, lastPosX, lastPosY);
             return false;
         };
         newCard.onmousedown = function(e) {
@@ -202,8 +200,6 @@
         var accepterNode = null;
         var giverNode = lastLocation.id;
 
-        var adjuster = window.outerHeight - window.innerHeight;
-
         var successfulMove = false;
         if (activeCards.length > 0) {
             var movingSuit = activeCards[0].data.s;
@@ -217,9 +213,9 @@
                 }
 
                 var aX0 = accepter.offsetLeft;
-                var aX1 = accepter.offsetLeft + accepter.offsetWidth;
-                var aY0 = accepter.offsetTop - adjuster;
-                var aY1 = (accepter.offsetTop - adjuster) + accepter.offsetHeight;
+                var aX1 = aX0 + accepter.offsetWidth;
+                var aY0 = accepter.offsetTop;
+                var aY1 = aY0 + accepter.offsetHeight;
 
                 var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
                 var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 1;
@@ -428,6 +424,7 @@
         var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
+        //window.scrollTo(0, 1000);
 
         if (isFinished) {
             setTimeout(function() {
