@@ -20,6 +20,19 @@ body {
     margin: auto;
 }
 
+@keyframes flipover {
+    0% {
+        transform: scaleX(0.001);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}
+
+.flipover {
+    animation: flipover 0.5s 1;
+}
+
 /* dark */
 .board.dark {
     background-image: linear-gradient(to top, #0f0c0c, #251e1e);
