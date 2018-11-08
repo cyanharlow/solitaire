@@ -132,10 +132,12 @@
             moveDrag(e, lastPosX, lastPosY);
         };
         newCard.ontouchend = function(e) {
+            console.log(e)
             e.preventDefault();
             var lastPosX = e.changedTouches[0].clientX
             var lastPosY = e.changedTouches[0].clientY;
-            stopDrag(e, lastPosX, lastPosY);
+            var positionY = e.changedTouches[0].screenY;
+            stopDrag(e, lastPosX, lastPosY, positionY);
             return false;
         };
         newCard.onmousedown = function(e) {
@@ -200,6 +202,8 @@
         var accepterNode = null;
         var giverNode = lastLocation.id;
 
+        var adjuster = window.outerHeight - window.innerHeight;
+
         var successfulMove = false;
         if (activeCards.length > 0) {
             var movingSuit = activeCards[0].data.s;
@@ -214,8 +218,8 @@
 
                 var aX0 = accepter.offsetLeft;
                 var aX1 = accepter.offsetLeft + accepter.offsetWidth;
-                var aY0 = accepter.offsetTop;
-                var aY1 = accepter.offsetTop + accepter.offsetHeight;
+                var aY0 = accepter.offsetTop - adjuster;
+                var aY1 = (accepter.offsetTop - adjuster) + accepter.offsetHeight;
 
                 var isStack = accepter.className.indexOf('stack') > -1 && accepter.children.length === 0;
                 var isCloset = accepter.className.indexOf('closet') > -1 && accepter.children.length === 1;
