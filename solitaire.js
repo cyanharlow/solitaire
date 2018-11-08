@@ -56,7 +56,7 @@
             htmls += '</div>';
             return htmls;
         }
-        return '<h2>' + displays['n' + n] + '</h2>';
+        return '<h2 class="numd">' + displays['n' + n] + '</h2>';
     }
 
     function strEndsWith(needle, haystack) {
@@ -106,8 +106,13 @@
             renderBoard();
             return false;
         } else if (e.target.id === 'back-button') {
-            e.preventDefault();
             window.history.back();
+            return false;
+        } else if (e.target.id === 'color') {
+            e.preventDefault();
+            var thisColor = e.target.checked ? 'dark' : 'light';
+            currentGame.color = thisColor;
+            historyPush();
             return false;
         }
     });
@@ -287,6 +292,7 @@
         cards = [];
         var game = {
             steps: 0,
+            color: 'light',
             stacks: {
                 stack1: [],
                 stack2: [],
@@ -355,6 +361,7 @@
         var isFinished = true;
         document.body.innerHTML = '';
         var board = document.createElement('div');
+        board.className = 'board ' + currentGame.color;
         var upperArea = document.createElement('div');
         upperArea.className = 'upper-area clear';
         for (var gc in currentGame.closets) {
@@ -405,7 +412,7 @@
 
         var bottomButtons = document.createElement('div');
         bottomButtons.className = 'bottom-buttons clear';
-        bottomButtons.innerHTML = '<button id="back-button" class="back">&larr;</button><button id="new-game" class="new">&#xff0b;</button>';
+        bottomButtons.innerHTML = '<button id="back-button" class="back">&larr;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="new-game" class="new">&#xff0b;</button>';
         board.appendChild(bottomButtons);
         document.body.appendChild(board);
 
