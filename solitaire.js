@@ -27,12 +27,15 @@
     var activeCards = [];
 
     var currentGame = {};
+    var priorGame = {};
 
-    function historyPush(itemToAnimate) {
+    function historyPush() {
         currentGame.steps = currentGame.steps + 1;
+        priorGame = window.history.state;
         window.history.pushState(currentGame, null, '#step' + currentGame.steps);
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
-        renderBoard(itemToAnimate);
+        renderBoard();
+        priorGame = currentGame;
     }
 
     function getCookie(cookie) {
@@ -121,7 +124,7 @@
         }
     });
 
-    function renderCard(data, itemToAnimate) {
+    function renderCard(data, extraClass) {
         var newCard = document.createElement('div');
         newCard.data = data;
         newCard.className = 'cd ';
@@ -155,14 +158,10 @@
             var lastPosY = e.pageY;
             stopDrag(e, lastPosX, lastPosY);
         };
-        var animateClass = '';
-        if (itemToAnimate && itemToAnimate.id === data.id) {
-            animateClass = ' ' + itemToAnimate.class;
-        }
         if (data.folded) {
             newCard.className = newCard.className + 'f';
         } else {
-            newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '') + animateClass;
+            newCard.className += data.s + ' n' + data.n + (data.accepting ? ' a' : '') + (extraClass ? extraClass : '');
             newCard.innerHTML = cardContents(data.n, data.s);
         }
         return newCard;
@@ -170,7 +169,6 @@
 
     function startDrag(e) {
         activeCards = [];
-        itemToAnimate = null;
         if (e.target.className.indexOf('cd') > -1 && !e.target.data.folded) {
             lastLocation = e.target.parentNode;
             activeCards.push(e.target);
@@ -187,11 +185,8 @@
                 currentGame.refuse.unshift(thisLast);
             }
             currentGame.refuse[currentGame.refuse.length - 1].folded = false;
-
-            itemToAnimate = currentGame.refuse[currentGame.refuse.length - 1];
-            itemToAnimate.class = 'slide';
             activeCards = [];
-            historyPush(itemToAnimate);
+            historyPush();
         }
     }
 
@@ -209,7 +204,6 @@
     }
 
     function stopDrag(e, lastPosX, lastPosY) {
-        var itemToAnimate = null;
         var accepterNode = null;
         var giverNode = lastLocation.id;
 
@@ -288,16 +282,12 @@
                     activeCards.shift();
                 }
                 if (oldStack.length) {
-                    if (oldStack[oldStack.length - 1].folded) {
-                        itemToAnimate = oldStack[oldStack.length - 1];
-                        itemToAnimate.class = giverNode === 'refuse' ? 'slide' : 'flipover';
-                    }
                     if (giverNode !== 'refuse') {
                         oldStack[oldStack.length - 1].accepting = true;
                     }
                     oldStack[oldStack.length - 1].folded = false;
                 }
-                historyPush(itemToAnimate);
+                historyPush();
             } else {
                 activeCards = [];
                 renderBoard();
@@ -374,7 +364,7 @@
         historyPush();
     }
 
-    function renderBoard(itemToAnimate) {
+    function renderBoard() {
         var isFinished = true;
         document.body.innerHTML = '';
         
@@ -400,13 +390,16 @@
             closets.appendChild(closet);
         }
         var refuse = document.createElement('div');
-        refuse.className = 'refuse-pile len' + currentGame.refuse.length;
+        var priorRefCard = priorGame.refuse[priorGame.refuse.length - 1];
+        var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
+        var shouldAnimate = currentRefCard.id !== priorRefCard.id || currentGame.refuse.length !== priorGame.refuse.length;
+        refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
             if (currentGame.refuse[r].folded) {
                 isFinished = false;
             }
-            refuse.appendChild(renderCard(currentGame.refuse[r], itemToAnimate));
+            refuse.appendChild(renderCard(currentGame.refuse[r], (shouldAnimate && r === currentGame.refuse.length - 1 ? ' slide' : null)));
         }
         board.appendChild(refuse);
         board.appendChild(closets);
@@ -419,14 +412,24 @@
             sn++;
             var stack = document.createElement('div');
             var childStackCards = currentGame.stacks[st];
+            var priorStack = priorGame.stacks[st];
+
+            var stackShrink = priorStack.length > childStackCards.length;
+            var stackGrow = priorStack.length > childStackCards.length;
 
             stack.id = 'stack' + sn;
-            stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a');
+            stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + (stackShrink || stackGrow ? ' contractexpand' : '');
+
+
             for (var f = 0; f < childStackCards.length; f++) {
                 if (childStackCards[f].folded) {
                     isFinished = false;
                 }
-                stack.appendChild(renderCard(childStackCards[f], itemToAnimate));
+                var animate = null;
+                if (f == childStackCards.length - 1 && !childStackCards[f].folded && priorStack[f] && priorStack[f].folded) {
+                    animate = ' flipover'
+                }
+                stack.appendChild(renderCard(childStackCards[f], animate));
             }
             board.appendChild(stack);
         }

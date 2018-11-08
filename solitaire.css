@@ -2,7 +2,7 @@ html {
     margin: 0;
     padding: 0;
     font-family: 'Raleway', 'Century Gothic', sans-serif;
-    background-image: linear-gradient(to top, #4e4141, #685454);
+    background-image: linear-gradient(to bottom, #9b4f4f, #703939);
 }
 body {
     padding: 0;
@@ -30,6 +30,16 @@ body {
         top: 0;
         transform: scaleX(1);
     }
+}
+
+@keyframes accordion {
+    0% { transform: scaleX(0.9); }
+    100% { transform: scaleX(1);}
+}
+
+@keyframes contractexpand {
+    0% { transform: scaleY(0.9); }
+    100% { transform: scaleY(1);}
 }
 
 @keyframes slideright {
@@ -118,6 +128,7 @@ border-color: #9c9c9c;
 h1 {
     padding: 50px 0 2px;
     font-weight: 200;
+    font-size: 3em;
 }
 button {
     border: 0;
@@ -128,10 +139,17 @@ button {
     cursor: pointer;
 }
 .start-container button {
-    background-color: #9c1c1c;
-    color: #cccccc;
+    background-color: #333333;
+    color: #eeeeee;
     min-width: 200px;
     margin: 0 auto 20px;
+}
+button.resumer {
+    background-color: #d6b6b6;
+    color: #190101;
+}
+button:hover {
+    background-color: #cc0000;
 }
 .bottom-buttons {
     position: fixed;
@@ -203,12 +221,7 @@ position: relative;
 .bottom-buttons .new {
     float: right;
 }
-button.resumer {
-    background-color: #333333;
-}
-button:hover {
-    background-color: #cc0000;
-}
+
 
 .upper-area {
     padding-bottom: 10px;
@@ -424,8 +437,11 @@ button:hover {
     width: 11%;
     padding-top: 70px;
     float: left;
+    transform-origin: 0 0;
 }
-
+.stack.contractexpand {
+    animation: contractexpand 0.5s 1;
+}
 .stack .cd {
     margin-bottom: 0;
     margin-left: 5px;
@@ -465,6 +481,10 @@ button:hover {
     padding-right: 0;
     padding-bottom: 0;
     float: left;
+    transform-origin: 0 0;
+}
+.refuse-pile.accordion {
+    animation: accordion 0.5s 1;
 }
 .refuse-pile .cd {
     margin-right: 0;
