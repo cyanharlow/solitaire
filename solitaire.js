@@ -416,6 +416,10 @@
         board.appendChild(bottomButtons);
         document.body.appendChild(board);
 
+        var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
+
+        document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
+
         if (isFinished) {
             setTimeout(function() {
                 alert('You finished the game!');
