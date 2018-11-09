@@ -97,7 +97,9 @@
     };
 
     window.onresize = function() {
-        renderBoard();
+        if (currentGame.steps > -1) {
+            renderBoard();
+        }
     };
 
     document.addEventListener('click', function(e) {
@@ -396,7 +398,7 @@
             closets.appendChild(closet);
         }
         var refuse = document.createElement('div');
-        var priorRefCard = priorGame.refuse ? priorGame.refuse[priorGame.refuse.length - 1] : null;
+        var priorRefCard = priorGame ? priorGame.refuse[priorGame.refuse.length - 1] : null;
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
         var shouldAnimate = currentRefCard && priorRefCard && (currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length);
         refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
@@ -418,12 +420,12 @@
             sn++;
             var stack = document.createElement('div');
             var childStackCards = currentGame.stacks[st];
-            var priorStack = priorGame.stacks[st];
+            var priorStack = priorStack ? priorGame.stacks[st] : null;
 
             var growAnimation = '';
-            if (priorStack.length > childStackCards.length) {
+            if (priorStack && priorStack.length > childStackCards.length) {
                 growAnimation = ' contract';
-            } else if (priorStack.length < childStackCards.length) {
+            } else if (priorStack && priorStack.length < childStackCards.length) {
                 growAnimation = ' expand';
             }
 
@@ -435,7 +437,7 @@
                     isFinished = false;
                 }
                 var animate = null;
-                if (f == childStackCards.length - 1 && !childStackCards[f].folded && priorStack[f] && priorStack[f].folded) {
+                if (priorStack && f == childStackCards.length - 1 && !childStackCards[f].folded && priorStack[f] && priorStack[f].folded) {
                     animate = ' flipover'
                 }
                 stack.appendChild(renderCard(childStackCards[f], animate));
