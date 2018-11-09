@@ -367,7 +367,7 @@
     function renderBoard() {
         var isFinished = true;
         document.body.innerHTML = '';
-        
+
         var outerBoard = document.createElement('div');
         outerBoard.className = 'board clear ' + currentGame.color;
         var board = document.createElement('div');
@@ -414,11 +414,15 @@
             var childStackCards = currentGame.stacks[st];
             var priorStack = priorGame.stacks[st];
 
-            var stackShrink = priorStack.length > childStackCards.length;
-            var stackGrow = priorStack.length < childStackCards.length;
+            var growAnimation = '';
+            if (priorStack.length > childStackCards.length) {
+                growAnimation = ' contract';
+            } else if (priorStack.length < childStackCards.length) {
+                growAnimation = ' expand';
+            }
 
             stack.id = 'stack' + sn;
-            stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + (stackShrink || stackGrow ? ' contractexpand' : '');
+            stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + growAnimation;
 
 
             for (var f = 0; f < childStackCards.length; f++) {

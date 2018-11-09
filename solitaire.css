@@ -37,11 +37,14 @@ body {
     100% { transform: scaleX(1);}
 }
 
-@keyframes contractexpand {
+@keyframes contract {
     0% { transform: scaleY(0.9); }
     100% { transform: scaleY(1);}
 }
-
+@keyframes expand {
+    0% { transform: scaleY(1.1); }
+    100% { transform: scaleY(1);}
+}
 @keyframes slideright {
     0% {
         left: -80px;
@@ -58,6 +61,12 @@ body {
 }
 .slide {
     animation: slideright 0.5s 1;
+}
+.contract {
+    animation: contract 0.5s 1;
+}
+.expand {
+    animation: expand 0.5s 1;
 }
 /* dark */
 .board.dark {
@@ -439,9 +448,7 @@ position: relative;
     float: left;
     transform-origin: 0 0;
 }
-.stack.contractexpand {
-    animation: contractexpand 0.5s 1;
-}
+
 .stack .cd {
     margin-bottom: 0;
     margin-left: 5px;
