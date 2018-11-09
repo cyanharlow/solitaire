@@ -105,7 +105,7 @@
             startNewGame();
             return false;
         } else if (e.target.id === 'new-game') {
-            if (window.confirm("Abandon old game and start a new one?")) {
+            if (window.confirm("Close this game and start a new one?")) {
                 startNewGame();
             }
             return false;
@@ -299,7 +299,7 @@
         cards = [];
         var game = {
             steps: 0,
-            color: 'light',
+            color: 'dark',
             stacks: {
                 stack1: [],
                 stack2: [],
@@ -372,6 +372,12 @@
         outerBoard.className = 'board clear ' + currentGame.color;
         var board = document.createElement('div');
         board.className = 'inner clear';
+
+        var bottomButtons = document.createElement('div');
+        bottomButtons.className = 'bottom-buttons';
+        bottomButtons.innerHTML = '<div class="in"><button id="new-game" class="new">&#xff0b;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="back-button" class="back">&larr;</button></div>';
+        board.appendChild(bottomButtons);
+
         var closets = document.createElement('div');
         closets.className = 'closets-area';
         for (var gc in currentGame.closets) {
@@ -390,7 +396,7 @@
             closets.appendChild(closet);
         }
         var refuse = document.createElement('div');
-        var priorRefCard = priorGame.refuse[priorGame.refuse.length - 1];
+        var priorRefCard = priorGame.refuse ? priorGame.refuse[priorGame.refuse.length - 1] : null;
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
         var shouldAnimate = currentRefCard && priorRefCard && (currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length);
         refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
@@ -424,7 +430,6 @@
             stack.id = 'stack' + sn;
             stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + growAnimation;
 
-
             for (var f = 0; f < childStackCards.length; f++) {
                 if (childStackCards[f].folded) {
                     isFinished = false;
@@ -438,11 +443,8 @@
             board.appendChild(stack);
         }
 
-        var bottomButtons = document.createElement('div');
-        bottomButtons.className = 'bottom-buttons clear';
-        bottomButtons.innerHTML = '<button id="back-button" class="back">&larr;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="new-game" class="new">&#xff0b;</button>';
-        board.appendChild(bottomButtons);
         outerBoard.appendChild(board);
+
         document.body.appendChild(outerBoard);
 
         var screenW = window.outerWidth;
@@ -452,7 +454,6 @@
         var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
-        //window.scrollTo(0, 1000);
 
         if (isFinished) {
             setTimeout(function() {
