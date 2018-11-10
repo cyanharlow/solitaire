@@ -152,8 +152,8 @@
             startDrag(e);
         };
         newCard.onmousemove = function(e) {
-            var lastPosX = e.pageX
-            var lastPosY = e.pageY;
+            var lastPosX = e.clientX;
+            var lastPosY = e.clientY;
             moveDrag(e, lastPosX, lastPosY);
         };
         newCard.onmouseup = function(e) {
@@ -396,6 +396,8 @@
         for (var gc in currentGame.closets) {
             var closet = document.createElement('div');
             var cardsInCloset = currentGame.closets[gc];
+            var priorCardsInCloset = priorGame && priorGame.closets ? priorGame.closets[gc] : [];
+            var shouldAnimate = cardsInCloset.length > priorCardsInCloset.length ? ' glow' : '';
             closet.id = gc;
             closet.className = 'closet closet' + gc + (cardsInCloset.length ? '' : ' a');
             closet.innerHTML = icons[gc];
@@ -404,7 +406,7 @@
                 if (cardsInCloset[c].folded) {
                     isFinished = false;
                 }
-                closet.appendChild(renderCard(cardsInCloset[c]));
+                closet.appendChild(renderCard(cardsInCloset[c], shouldAnimate));
             }
             closets.appendChild(closet);
         }

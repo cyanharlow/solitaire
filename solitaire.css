@@ -78,6 +78,24 @@ body {
     }
 }
 
+@keyframes glow {
+    0% {
+        margin-top: -76px;
+        transform: scale(1);
+        box-shadow: 0 0 15px -5px rgba(135, 65, 65, 0.5);
+    }
+    50% {
+        margin-top: -86px;
+        transform: scale(1.1);
+        box-shadow:0 0 15px 5px rgba(135, 65, 65, 0.5);
+    }
+    100% {
+        margin-top: -76px;
+        transform: scale(1);
+        box-shadow: 0 0 15px -15px rgba(135, 65, 65, 0.5);
+    }
+}
+
 .flipover {
     animation: flipover 0.5s 1;
 }
@@ -204,9 +222,7 @@ body {
 
 /* dark */
 .board.dark {
-    background-image: linear-gradient(to top,
-#0f0c0c,
-#251e1e);
+    background-image: linear-gradient(to top, #0f0c0c, #251e1e);
 }
 
 .board.dark .cd.f {
@@ -221,7 +237,7 @@ body {
 
 .board.dark.mobile .nav-buttons .in,
 .board.dark.desktop .nav-buttons {
-    background-color: #251e1e;
+    background-color: #302727;
 }
 
 .board.dark .nav-buttons button {
@@ -526,12 +542,14 @@ button:hover {
 }
 
 .icon.heart .c {
+    clear: both;
     transform: rotate(45deg);
     width: 52%;
     height: 52%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 38%;
+    position: relative;
+    top: -28%;
 }
 
 .icon.spade .a,
@@ -658,6 +676,7 @@ button:hover {
 
 .stack {
     padding-top: 70px;
+    min-height: 70px;
     float: left;
     transform-origin: 0 0;
 }
@@ -805,6 +824,9 @@ button:hover {
     margin: 0 5px 0 0;
 }
 
+.closet .cd.glow {
+    animation: glow 0.5s 1;
+}
 .closet .cd {
     margin: -76px 0 0;
 }
