@@ -33,9 +33,9 @@
     function historyPush() {
         currentGame.steps = currentGame.steps + 1;
         priorGame = window.history.state;
-        window.history.pushState(currentGame, currentGame.steps > 0 ? currentGame.steps + ' - Solitaire' : null, currentGame.steps > 0 ? '#step' + currentGame.steps : null);
+        window.history.pushState(currentGame, null, currentGame.steps > 0 ? '#step' + currentGame.steps : null);
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
-        renderBoard();
+        historyPush();
         priorGame = currentGame;
     }
 
@@ -409,7 +409,7 @@
             closets.appendChild(closet);
         }
         var refuse = document.createElement('div');
-        var priorRefCard = priorGame ? priorGame.refuse[priorGame.refuse.length - 1] : null;
+        var priorRefCard = priorGame && priorGame.refuse ? priorGame.refuse[priorGame.refuse.length - 1] : null;
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
         var shouldAnimate = currentRefCard && priorRefCard && (currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length);
         refuse.className = 'refuse-pile len' + (currentGame.refuse.length < 25 ? currentGame.refuse.length : ' all') + (shouldAnimate ? ' accordion' : '');
@@ -431,7 +431,7 @@
             sn++;
             var stack = document.createElement('div');
             var childStackCards = currentGame.stacks[st];
-            var priorStack = priorGame ? priorGame.stacks[st] : null;
+            var priorStack = priorGame && priorGame.stacks ? priorGame.stacks[st] : null;
 
             var growAnimation = '';
             if (priorStack && priorStack.length > childStackCards.length) {
@@ -474,6 +474,7 @@
                 startNewGame();
             }, 500);
         }
+        document.title = currentGame.steps + ' - Solitaire';
         hasStarted = true;
     }
 
