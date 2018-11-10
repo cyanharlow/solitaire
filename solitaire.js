@@ -33,7 +33,7 @@
     function historyPush() {
         currentGame.steps = currentGame.steps + 1;
         priorGame = window.history.state;
-        window.history.pushState(currentGame, null, '#step' + currentGame.steps);
+        window.history.pushState(currentGame, currentGame.steps > 0 ? currentGame.steps + ' - Solitaire' : null, currentGame.steps > 0 ? '#step' + currentGame.steps : null);
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
         renderBoard();
         priorGame = currentGame;
@@ -301,7 +301,7 @@
     function startNewGame() {
         cards = [];
         var game = {
-            steps: 0,
+            steps: -28,
             color: 'dark',
             stacks: {
                 stack1: [],
@@ -347,24 +347,34 @@
 
         var maxStack = 0;
         var nextStack = 2;
-        for (var r = 0; r < 28; r++) {
-            var sortoObject = game.refuse[game.refuse.length - 1];
-            game.refuse.pop();
-            maxStack++;
-            if (maxStack === 8 || maxStack === 1) {
-                sortoObject.folded = false;
-                sortoObject.accepting = true;
-            }
-            if (maxStack === 8) {
-                maxStack = nextStack;
-                nextStack++;
-            }
-            if (nextStack < 9) {
-                game.stacks['stack' + maxStack].push(sortoObject)
-            }
-        }
+        var delay = 1;
         currentGame = game;
         historyPush();
+        var interv = setInterval(fillBoard, 100);
+
+        function fillBoard() {
+            if (delay === 29) {
+                clearInterval(interv)
+            } else {
+                delay++;
+                var sortoObject = game.refuse[game.refuse.length - 1];
+                game.refuse.pop();
+                maxStack++;
+                if (maxStack === 8 || maxStack === 1) {
+                    sortoObject.folded = false;
+                    sortoObject.accepting = true;
+                }
+                if (maxStack === 8) {
+                    maxStack = nextStack;
+                    nextStack++;
+                }
+                if (nextStack < 9) {
+                    game.stacks['stack' + maxStack].push(sortoObject)
+                }
+                currentGame = game;
+                historyPush();
+            }
+        }
     }
 
     function renderBoard() {
@@ -402,7 +412,7 @@
         var priorRefCard = priorGame ? priorGame.refuse[priorGame.refuse.length - 1] : null;
         var currentRefCard = currentGame.refuse[currentGame.refuse.length - 1];
         var shouldAnimate = currentRefCard && priorRefCard && (currentRefCard.id !== priorRefCard.id || currentRefCard.folded !== priorRefCard.folded || currentGame.refuse.length !== priorGame.refuse.length);
-        refuse.className = 'refuse-pile len' + currentGame.refuse.length + (shouldAnimate ? ' accordion' : '');
+        refuse.className = 'refuse-pile len' + (currentGame.refuse.length < 25 ? currentGame.refuse.length : ' all') + (shouldAnimate ? ' accordion' : '');
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
             if (currentGame.refuse[r].folded) {

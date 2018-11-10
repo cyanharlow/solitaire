@@ -715,6 +715,11 @@ button:hover {
         float: right;
     }
 
+
+    .refuse-pile.all .cd.f {
+        margin-left: -53.6px;
+    }
+
     .refuse-pile.len24 .cd.f {
         margin-left: -53.2px;
     }
