@@ -513,7 +513,7 @@ button:hover {
 .icon.heart .b {
     border-radius: 50%;
     width: 50%;
-    height: 50%;
+    height: 52%;
     margin-top: 14%;
 }
 
@@ -529,7 +529,8 @@ button:hover {
     transform: rotate(45deg);
     width: 52%;
     height: 52%;
-    margin-left: 24%;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 38%;
 }
 
@@ -545,8 +546,9 @@ button:hover {
     transform: rotate(45deg);
     width: 55%;
     height: 55%;
-    margin-left: 23%;
-    margin-top: 26%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 27%;
     margin-bottom: -44%;
 }
 
@@ -568,7 +570,7 @@ button:hover {
 .icon.club .b,
 .icon.club .c {
     border-radius: 50%;
-    width: 44%;
+    width: 46%;
     height: 44%;
 }
 
