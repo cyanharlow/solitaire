@@ -35,7 +35,7 @@
         priorGame = window.history.state;
         window.history.pushState(currentGame, null, currentGame.steps > 0 ? '#step' + currentGame.steps : null);
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
-        historyPush();
+        renderBoard();
         priorGame = currentGame;
     }
 
@@ -113,7 +113,7 @@
             }
             return false;
         } else if (e.target.id === 'resume-game') {
-            renderBoard();
+            historyPush();
             return false;
         } else if (e.target.id === 'back-button') {
             window.history.back();
@@ -387,7 +387,7 @@
         board.className = 'inner clear';
 
         var bottomButtons = document.createElement('div');
-        bottomButtons.className = 'bottom-buttons';
+        bottomButtons.className = 'nav-buttons';
         bottomButtons.innerHTML = '<div class="in"><button id="new-game" class="new">&#xff0b;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="back-button" class="back">&larr;</button></div>';
         board.appendChild(bottomButtons);
 
@@ -458,15 +458,18 @@
 
         outerBoard.appendChild(board);
 
-        document.body.appendChild(outerBoard);
 
         var screenW = window.outerWidth;
         var screenH = window.outerHeight;
+        var isDesktop = window.navigator.appVersion.indexOf('Phone') === -1 && window.navigator.appVersion.indexOf('Mobile') === -1;
 
         var ratio = screenW > screenH ? '690' : '530';
+        var ratioClass = screenW > screenH ? ' landscape' : ' portrait';
         var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
+        outerBoard.className = outerBoard.className + ratioClass + (isDesktop ? ' desktop' : ' mobile');
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
+        document.body.appendChild(outerBoard);
 
         if (isFinished) {
             setTimeout(function() {
