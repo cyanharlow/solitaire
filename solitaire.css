@@ -741,6 +741,7 @@ button:hover {
 .board.desktop .refuse-pile.accordion,
 .board.mobile.portrait .refuse-pile.accordion {
     animation: accordion 0.5s 1;
+    transform-origin: 0 0;
 }
 
 .board.desktop .refuse-pile,
@@ -748,8 +749,7 @@ button:hover {
     width: 185px;
     float: left;
     padding-top: 50px;
-    padding-right: 0;
-    padding-bottom: 0;
+    padding-left: 2%;
 }
 
 .board.desktop .refuse-pile .cd,
