@@ -291,10 +291,33 @@
                     oldStack[oldStack.length - 1].folded = false;
                 }
                 historyPush();
+                checkIfFinished();
             } else {
                 activeCards = [];
                 renderBoard();
             }
+        }
+    }
+
+    function checkIfFinished() {
+        var isFinished = true;
+        for (var re = 0; re < currentGame.refuse.length; re++) {
+            if (currentGame.refuse[re].folded) {
+                isFinished = false;
+            }
+        }
+        for (var stac in currentGame.stacks) {
+            for (var s = 0; s < currentGame.stacks[stac].length; s++) {
+                if (currentGame.stacks[stac][s].folded) {
+                    isFinished = false;
+                }
+            }
+        }
+        if (isFinished) {
+            var closs = currentGame.closets;
+            var cardsLeft = 52 - (closs['c'].length + closs['d'].length + closs['h'].length + closs['s'].length);
+            clearBoard(cardsLeft);
+            hasStarted = false;
         }
     }
 
@@ -378,11 +401,11 @@
     }
 
     function renderBoard() {
-        var isFinished = true;
         document.body.innerHTML = '';
 
         var outerBoard = document.createElement('div');
         outerBoard.className = 'board clear ' + currentGame.color;
+        outerBoard.id = "gameboard";
         var board = document.createElement('div');
         board.className = 'inner clear';
 
@@ -403,9 +426,6 @@
             closet.innerHTML = icons[gc];
             closet.setAttribute('data-suit', gc);
             for (var c = 0; c < cardsInCloset.length; c++) {
-                if (cardsInCloset[c].folded) {
-                    isFinished = false;
-                }
                 closet.appendChild(renderCard(cardsInCloset[c], shouldAnimate));
             }
             closets.appendChild(closet);
@@ -417,9 +437,6 @@
         refuse.className = 'refuse-pile len' + (currentGame.refuse.length < 25 ? currentGame.refuse.length : ' all') + (shouldAnimate ? ' accordion' : '');
         refuse.id = 'refuse';
         for (var r = 0; r < currentGame.refuse.length; r++) {
-            if (currentGame.refuse[r].folded) {
-                isFinished = false;
-            }
             refuse.appendChild(renderCard(currentGame.refuse[r], (shouldAnimate && r === currentGame.refuse.length - 1 ? ' slide' : null)));
         }
         board.appendChild(refuse);
@@ -446,9 +463,6 @@
             stack.className = 'stack len' + childStackCards.length + (childStackCards.length ? '' : ' a') + growAnimation;
 
             for (var f = 0; f < childStackCards.length; f++) {
-                if (childStackCards[f].folded) {
-                    isFinished = false;
-                }
                 var animate = null;
                 if (priorStack && f == childStackCards.length - 1 && !childStackCards[f].folded && priorStack[f] && priorStack[f].folded) {
                     animate = ' flipover'
@@ -459,7 +473,6 @@
         }
 
         outerBoard.appendChild(board);
-
 
         var screenW = window.outerWidth;
         var screenH = window.outerHeight;
@@ -473,14 +486,40 @@
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
         document.body.appendChild(outerBoard);
 
-        if (isFinished) {
-            setTimeout(function() {
-                alert('You finished the game!');
-                startNewGame();
-            }, 500);
-        }
         document.title = currentGame.steps + ' - Solitaire';
         hasStarted = true;
+    }
+
+    function clearBoard(cards) {
+        var cardsLeft = cards - 1;
+        for (var cb = 0; cb < cardsLeft; cb++) {
+            var isLast = cb == (cardsLeft - 1);
+
+            setTimeout(function() {
+                for (var clos in currentGame.closets) {
+                    var lastCloseted = currentGame.closets[clos].length ? currentGame.closets[clos][currentGame.closets[clos].length - 1] : {'s': clos, 'n': 0};
+                    for (var stac in currentGame.stacks) {
+                        var lastStacked = currentGame.stacks[stac][currentGame.stacks[stac].length - 1];
+                        var lastRefused = currentGame.refuse[currentGame.refuse.length - 1];
+                        if (lastStacked && lastStacked.s == lastCloseted.s && lastStacked.n === lastCloseted.n + 1) {
+                            currentGame.stacks[stac].pop();
+                            currentGame.closets[clos].push(lastStacked);
+                            break;
+                        } else if (lastRefused && lastRefused.s == lastCloseted.s && lastRefused.n === lastCloseted.n + 1) {
+                           currentGame.refuse.pop();
+                           currentGame.closets[clos].push(lastRefused);
+                           break;
+                        }
+                    }
+                }
+                historyPush();
+
+            }, 100 * (cb));
+        }
+        setTimeout(function() {
+            document.getElementById("gameboard").innerHTML = '<h2>You won!</h2><button id="startnew">Start new game</button>';
+        }, 100 * cardsLeft);
+
     }
 
     if (getCookie('currentGame') !== null) {

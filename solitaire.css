@@ -263,7 +263,7 @@ body {
 
 /* light */
 .board.light {
-    background-image: linear-gradient(to top, #ffc0c0, #fff0f0);
+    background-image: linear-gradient(to top, #ce9d9d, #e9e3e3);
 }
 
 .board.light .cd.f {
@@ -273,16 +273,16 @@ body {
 }
 
 .board.light .closet {
-    background-color: #f8cdcf;
+    background-color: #f6e5e5;
 }
 
 .board.light.mobile .nav-buttons .in,
 .board.light.desktop .nav-buttons {
-    background-color: #ffe4e4;
+    background-color: #dcc0c0;
 }
 
 .board.light .nav-buttons button {
-    background-color: #ffffff;
+    background-color: #e6dbdb;
     color: #000000;
 }
 
