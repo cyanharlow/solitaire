@@ -303,15 +303,18 @@ body {
 }
 
 /* end of colors */
-h1 {
+h1, h2 {
     padding: 50px 0 2px;
     font-weight: 200;
     font-size: 3em;
 }
 
+.won {}
+
 button {
     border: 0;
     padding: 10px 20px;
+    font-weight: bold;
     font-family: 'Raleway', 'Century Gothic', sans-serif;
     border-radius: 8px;
     font-size: 18px;
@@ -655,6 +658,8 @@ button:hover {
 .cd h2 {
     text-align: center;
     padding: 6px 0 0;
+    font-size: 1.9em;
+    font-weight: bold;
 }
 
 .cd hr {

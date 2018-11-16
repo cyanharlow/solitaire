@@ -316,8 +316,8 @@
         if (isFinished) {
             var closs = currentGame.closets;
             var cardsLeft = 52 - (closs['c'].length + closs['d'].length + closs['h'].length + closs['s'].length);
-            clearBoard(cardsLeft);
             hasStarted = false;
+            clearBoard(cardsLeft);
         }
     }
 
@@ -398,6 +398,7 @@
                 historyPush();
             }
         }
+        hasStarted = true;
     }
 
     function renderBoard() {
@@ -486,16 +487,18 @@
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
         document.body.appendChild(outerBoard);
 
-        document.title = currentGame.steps + ' - Solitaire';
-        hasStarted = true;
+        document.title = hasStarted && currentGame.steps > 0 ? currentGame.steps + ' - Solitaire' : 'Solitaire';
     }
 
     function clearBoard(cards) {
-        var cardsLeft = cards - 1;
-        for (var cb = 0; cb < cardsLeft; cb++) {
-            var isLast = cb == (cardsLeft - 1);
+        var delay = 0;
+        var finishingInterval = setInterval(wipeBoard, 200);
 
-            setTimeout(function() {
+        function wipeBoard() {
+            if (delay >= cards) {
+                clearInterval(finishingInterval);
+                document.getElementById("gameboard").innerHTML = '<div class="won"><h2>You won!</h2><button id="startnew">Start new game</button></div>';
+            } else {
                 for (var clos in currentGame.closets) {
                     var lastCloseted = currentGame.closets[clos].length ? currentGame.closets[clos][currentGame.closets[clos].length - 1] : {'s': clos, 'n': 0};
                     for (var stac in currentGame.stacks) {
@@ -504,22 +507,19 @@
                         if (lastStacked && lastStacked.s == lastCloseted.s && lastStacked.n === lastCloseted.n + 1) {
                             currentGame.stacks[stac].pop();
                             currentGame.closets[clos].push(lastStacked);
+                            delay++;
                             break;
                         } else if (lastRefused && lastRefused.s == lastCloseted.s && lastRefused.n === lastCloseted.n + 1) {
                            currentGame.refuse.pop();
                            currentGame.closets[clos].push(lastRefused);
+                           delay++;
                            break;
                         }
                     }
                 }
                 historyPush();
-
-            }, 100 * (cb));
+            };
         }
-        setTimeout(function() {
-            document.getElementById("gameboard").innerHTML = '<h2>You won!</h2><button id="startnew">Start new game</button>';
-        }, 100 * cardsLeft);
-
     }
 
     if (getCookie('currentGame') !== null) {
