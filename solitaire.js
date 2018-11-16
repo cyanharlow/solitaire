@@ -497,7 +497,7 @@
         function wipeBoard() {
             if (delay >= cards) {
                 clearInterval(finishingInterval);
-                document.getElementById("gameboard").innerHTML = '<div class="won"><h2>You won!</h2><button id="startnew">Start new game</button></div>';
+                document.getElementById("gameboard").innerHTML = '<div class="won"><h1>You won!</h1><button id="startnew">Start new game</button></div>';
             } else {
                 for (var clos in currentGame.closets) {
                     var lastCloseted = currentGame.closets[clos].length ? currentGame.closets[clos][currentGame.closets[clos].length - 1] : {'s': clos, 'n': 0};

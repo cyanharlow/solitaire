@@ -264,6 +264,7 @@ body {
 /* light */
 .board.light {
     background-image: linear-gradient(to top, #ce9d9d, #e9e3e3);
+    color: #4b0707;
 }
 
 .board.light .cd.f {
@@ -303,13 +304,21 @@ body {
 }
 
 /* end of colors */
-h1, h2 {
-    padding: 50px 0 2px;
+h1 {
+    padding: 100px 0 25px;
     font-weight: 200;
     font-size: 3em;
+    margin: 0;
 }
 
-.won {}
+.won button {
+    color: #eeeeee;
+    background-color: #cc0000;
+}
+.won button:hover {
+    color: #cccccc;
+    background-color: maroon;
+}
 
 button {
     border: 0;
