@@ -34,6 +34,7 @@
         currentGame.steps = currentGame.steps + 1;
         priorGame = window.history.state;
         window.history.pushState(currentGame, null, currentGame.steps > 0 ? '#step' + currentGame.steps : null);
+        document.cookie = 'color=' + (getCookie('color') ? getCookie('color') : 'dark');
         document.cookie = 'currentGame=' + JSON.stringify(currentGame);
         renderBoard();
         priorGame = currentGame;
@@ -121,8 +122,8 @@
         } else if (e.target.id === 'color') {
             e.preventDefault();
             var thisColor = e.target.checked ? 'dark' : 'light';
-            currentGame.color = thisColor;
-            historyPush();
+            document.cookie = 'color=' + thisColor;
+            renderBoard();
             return false;
         }
     });
@@ -325,7 +326,6 @@
         cards = [];
         var game = {
             steps: -28,
-            color: 'dark',
             stacks: {
                 stack1: [],
                 stack2: [],
@@ -403,16 +403,15 @@
 
     function renderBoard() {
         document.body.innerHTML = '';
-
         var outerBoard = document.createElement('div');
-        outerBoard.className = 'board clear ' + currentGame.color;
+        outerBoard.className = 'board clear ' + getCookie('color');
         outerBoard.id = "gameboard";
         var board = document.createElement('div');
         board.className = 'inner clear';
 
         var bottomButtons = document.createElement('div');
         bottomButtons.className = 'nav-buttons';
-        bottomButtons.innerHTML = '<div class="in"><button id="new-game" class="new">&#xff0b;</button><div class="toggle"><input type="checkbox" id="color" ' + (currentGame.color === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="back-button" class="back">&larr;</button></div>';
+        bottomButtons.innerHTML = '<div class="in"><button id="new-game" class="new">&#xff0b;</button><div class="toggle"><input type="checkbox" id="color" ' + (getCookie('color') === 'dark' ? 'checked' : '') + '><label for="color"></label></div><button id="back-button" class="back">&larr;</button></div>';
         board.appendChild(bottomButtons);
 
         var closets = document.createElement('div');
@@ -481,7 +480,7 @@
 
         var ratio = screenW > screenH ? '690' : '530';
         var ratioClass = screenW > screenH ? ' landscape' : ' portrait';
-        var browserColor = currentGame.color === 'dark' ? '000000' : 'ffffff';
+        var browserColor = getCookie('color') === 'dark' ? '000000' : 'ffffff';
         outerBoard.className = outerBoard.className + ratioClass + (isDesktop ? ' desktop' : ' mobile');
         document.getElementById('metaColor').setAttribute("content", "#" + browserColor);
         document.getElementById('metaWidth').setAttribute("content", "width=" + ratio + ",user-scalable=no");
