@@ -33,6 +33,6 @@ And because I do love our all-powerful Google with its blackmail-worthy database
 1. I abandoned the timing/scores feature because oh my god who cares
 1. The drag-and-droppable zones work as I expect them to
 1. The "Undo" button works just like Google's, but it's actually _the exact same process as using your browser's back button_. Use either one! Use both for all I care!
-  1. JavaScript's pushState() allows for an Undo button that works the way I would want it to on Android - so that even a mistaken use of the native Android Back Button keeps you in the game.
-  1. If you somehow infinity-back-button your way out of the page, no fear! Come back and find your game cookied so that you can jump right back into things.
+   1. JavaScript's pushState() allows for an Undo button that works the way I would want it to on Android - so that even a mistaken use of the native Android Back Button keeps you in the game.
+   1. If you somehow infinity-back-button your way out of the page, no fear! Come back and find your game cookied so that you can jump right back into things.
 1. No ugly bright green felt colors. Day mode and night mode!
