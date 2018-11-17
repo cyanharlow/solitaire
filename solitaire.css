@@ -151,10 +151,17 @@ body {
     width: 60px;
     height: 25px;
 }
+.board.desktop .nav-buttons .toggle label,
+.board.mobile.portrait .nav-buttons .toggle label {
+    height: 25px;
+}
 
 .board.mobile.landscape .nav-buttons .toggle {
     height: 60px;
     width: 25px;
+}
+.board.mobile.landscape .nav-buttons .toggle label {
+    height: 60px;
 }
 
 .board.desktop .nav-buttons .in:after {
@@ -424,6 +431,7 @@ button:hover {
 
 .nav-buttons label {
     display: block;
+    cursor: pointer;
 }
 
 .nav-buttons label:after {
