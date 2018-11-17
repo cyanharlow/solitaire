@@ -26,7 +26,7 @@ So imagine my surprise when this Solitaire app was not only weirdly buggy, but a
 
 I've been playing games like these for a good portion of my adult life, but I've only been a developer for a small fraction of that time. So it took several frustrating Solitaire games for me to remember that **no one is forcing me to play Solitaire** and that I can actually just **build one my damn self if I care so much about it**.
 
-##SO I DID.
+## SO I DID.
 
 And because I do love our all-powerful Google with its blackmail-worthy database of information (they've got more than just arithmetic searches on me, you know) I kept the UI Google-inspired. I just redid it in a way that was specific to my desires.
 
