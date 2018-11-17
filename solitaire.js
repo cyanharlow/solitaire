@@ -30,6 +30,13 @@
     var priorGame = {};
     var hasStarted = false;
 
+    function renderStartBoard() {
+        if (getCookie('currentGame') !== null) {
+            currentGame = JSON.parse(getCookie('currentGame'));
+        }
+        document.body.innerHTML = '<div id="start-container" class="start-container"><h1>Solitaire</h1><button id="startnew">New game</button><br>' + (getCookie('currentGame') !== null ? '<button id="resume-game" class="resumer">Resume previous</button>' : '') + '</div>';
+    }
+
     function historyPush() {
         currentGame.steps = currentGame.steps + 1;
         priorGame = window.history.state;
@@ -94,6 +101,9 @@
             renderBoard();
             if (strEndsWith('step1', e.newURL) && strEndsWith('step2', e.oldURL)) {
                 alert('You have reached the beginning of this game!');
+            } else if (strEndsWith('step1', e.oldURL)) {
+                window.history.go(-28);
+                renderStartBoard();
             }
         }
     };
@@ -521,12 +531,5 @@
         }
     }
 
-    if (getCookie('currentGame') !== null) {
-        currentGame = JSON.parse(getCookie('currentGame'));
-        var resumeButton = document.createElement('button');
-        resumeButton.innerHTML = 'Resume previous';
-        resumeButton.className = 'resumer';
-        resumeButton.id = 'resume-game';
-        document.getElementById('start-container').appendChild(resumeButton);
-    }
+    renderStartBoard()
 })();
