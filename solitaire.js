@@ -504,7 +504,7 @@
         var finishingInterval = setInterval(wipeBoard, 200);
 
         function wipeBoard() {
-            if (delay >= cards) {
+            if (delay >= (cards - 1)) {
                 clearInterval(finishingInterval);
                 document.getElementById("gameboard").innerHTML = '<div class="won"><h1>You won!</h1><button id="startnew">Start new game</button></div>';
             } else {
