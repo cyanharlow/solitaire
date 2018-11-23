@@ -2,6 +2,7 @@
     var cards = [];
     var suits = ['h', 's', 'c', 'd'];
     var displays = {
+        n1: 'A',
         n11: 'J',
         n12: 'Q',
         n13: 'K'
