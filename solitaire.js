@@ -2,16 +2,6 @@
     var cards = [];
     var suits = ['h', 's', 'c', 'd'];
     var displays = {
-        n1: 'A',
-        n2: '2',
-        n3: '3',
-        n4: '4',
-        n5: '5',
-        n6: '6',
-        n7: '7',
-        n8: '8',
-        n9: '9',
-        n10: '10',
         n11: 'J',
         n12: 'Q',
         n13: 'K'
@@ -92,7 +82,7 @@
     }
 
     function cardContents(n, s) {
-        return '<p>' + displays['n' + n] + '</p>' + icons[s] + '<hr/>' + getAllIcons(n, s);
+        return '<p>' + (displays['n' + n] ? displays['n' + n] : n) + '</p>' + icons[s] + '<hr/>' + getAllIcons(n, s);
     }
 
     window.onhashchange = function(e) {
