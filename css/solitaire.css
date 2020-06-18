@@ -701,6 +701,16 @@ button:hover {
     min-height: 70px;
     float: left;
     transform-origin: 0 0;
+    background-size: 52px 74px;
+    background-repeat: no-repeat;
+    background-position: center 10px;
+}
+
+.board.dark .stack {
+  background-image: linear-gradient(#312727, #221c1c);
+}
+.board.light .stack {
+  background-image: linear-gradient(#e6dada, #e5d9d9);
 }
 
 .board.mobile.landscape .stack {
