@@ -405,7 +405,7 @@
     function renderBoard() {
         document.body.innerHTML = '';
         var outerBoard = document.createElement('div');
-        outerBoard.className = 'board clear ' + getCookie('color');
+        outerBoard.className = 'board clear ' + (getCookie('color') ? getCookie('color') : 'dark');
         outerBoard.id = "gameboard";
         var board = document.createElement('div');
         board.className = 'inner clear';
